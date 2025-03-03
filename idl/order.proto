@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package order;
+
+import "cart.proto";
+
+option go_package = "order";
+
+service OrderService {
+  rpc PlaceOrder(PlaceOrderReq) returns (PlaceOrderResp) {}
+  rpc ListOrder(ListOrderReq) returns (ListOrderResp) {}
+  rpc MarkOrderPaid(MarkOrderPaidReq) returns (MarkOrderPaidResp) {}
+  rpc UpdateOrder(UpdateOrderReq) returns (UpdateOrderResp) {}  // 新增的RPC方法
+  rpc DeleteOrder(DeleteOrderReq) returns (DeleteOrderResp) {}  // 新增的RPC方法
+}
+
+message Address {
+  string street_address = 1;
+  string city = 2;
+  string state = 3;
+  string country = 4;
+  int32 zip_code = 5;
+}
+
+message PlaceOrderReq {
+  uint32 user_id = 1;
+  string user_currency = 2;
+
+  Address address = 3;
+  string email = 4;
+  repeated OrderItem order_items = 5;
+}
+
+message OrderItem {
+  cart.CartItem item = 1;
+  float cost = 2;
+}
+
+message OrderResult {
+  string order_id = 1;
+}
+
+message PlaceOrderResp {
+  OrderResult order = 1;
+}
+
+message ListOrderReq {
+  uint32 user_id = 1;
+}
+
+message Order {
+  repeated OrderItem order_items = 1;
+  string order_id = 2;
+  uint32 user_id = 3;
+  string user_currency = 4;
+  Address address = 5;
+  string email = 6;
+  int32 created_at = 7;
+}
+
+message ListOrderResp {
+  repeated Order orders = 1;
+}
+
+message MarkOrderPaidReq {
+  uint32 user_id = 1;
+  string order_id = 2;
+}
+
+message MarkOrderPaidResp {}
+
+// 新增的请求和响应消息
+message UpdateOrderReq {
+  string order_id = 1;  // 要修改的订单ID
+  uint32 user_id = 2;   // 用户ID，用于验证权限
+  Address address = 3;  // 新的地址信息（可选）
+  string email = 4;     // 新的邮箱信息（可选）
+}
+
+message UpdateOrderResp {
+  OrderResult order = 1;  // 返回更新后的订单信息
+}
+
+message DeleteOrderReq {
+  string order_id = 1;  
+  uint32 user_id = 2;   
+}
+
+message DeleteOrderResp {
+  OrderResult order = 1;  // 返回更新后的订单信息
+}
