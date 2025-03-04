@@ -1,0 +1,26 @@
+<!-- templates/home.html -->
+{{define "home"}}
+{{template "header" .}}
+<div class="row">
+  {{range .Items}}
+  <div class="col-sm-6 col-md-4 mb-4">
+    <div class="thumbnail card">
+      <img src="{{.Image}}" alt="{{.Title}}" class="card-img-top">
+      <div class="card-body">
+        <h3 class="card-title">{{.Title}}</h3>
+        <p class="card-text">{{.Description}}</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <p class="mb-0 fw-bold">${{.Price}}</p>
+          <div>
+            <button class="btn btn-outline-primary add-to-cart"
+                    data-id="{{.ID}}">Add to Cart</button>
+            <a href="/item/{{.ID}}" class="btn btn-primary">View</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{end}}
+</div>
+{{template "footer" .}}
+{{end}}

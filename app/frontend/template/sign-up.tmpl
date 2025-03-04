@@ -1,0 +1,54 @@
+<!-- templates/sign-up.html -->
+{{define "sign-up"}}
+{{template "header" .}}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Sign Up</h2>
+
+                    <!-- 登录表单 -->
+                    <form id="signinForm" action="/auth/register" method="POST">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address {{template "required"}}</label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                   placeholder="Enter your email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password {{template "required"}}</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                   placeholder="Enter your password" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password_confirm" class="form-label">Password Confirm {{template "required"}}</label>
+                            <input type="password" class="form-control" id="password_confirm" name="password_confirm"
+                                   placeholder="Enter your password again" required>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="remember">
+                            <label class="form-check-label" for="remember">Remember me</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Sign In</button>
+                    </form>
+
+                    <!-- 附加链接 -->
+                    <div class="text-center mt-3">
+                        <a href="/forgot-password" class="text-muted">Forgot password?</a>
+                    </div>
+                    <div class="text-center mt-2">
+                        <p>Already have an account? <a href="/sign-in">Sign up</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{template "footer" .}}
+{{end}}
