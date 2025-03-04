@@ -4,32 +4,68 @@ package main
 
 import (
 	"context"
-	"time"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
 	"github.com/cloudwego/hertz/pkg/app/server"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/cors"
 	"github.com/hertz-contrib/gzip"
 	"github.com/hertz-contrib/logger/accesslog"
-	hertzlogrus "github.com/hertz-contrib/logger/logrus"
+	hertzprom "github.com/hertz-contrib/monitor-prometheus"
+	hertzotelprovider "github.com/hertz-contrib/obs-opentelemetry/provider"
+	hertzoteltracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
 	"github.com/hertz-contrib/pprof"
+	"github.com/hertz-contrib/sessions"
+	"github.com/hertz-contrib/sessions/redis"
+	"github.com/joho/godotenv"
 	"github.com/meilingluolingluo/gomall/app/frontend/biz/router"
 	"github.com/meilingluolingluo/gomall/app/frontend/conf"
-	"go.uber.org/zap/zapcore"
-	"gopkg.in/natefinch/lumberjack.v2"
+	"github.com/meilingluolingluo/gomall/app/frontend/infra/mtl"
+	"github.com/meilingluolingluo/gomall/app/frontend/infra/rpc"
+	"github.com/meilingluolingluo/gomall/app/frontend/middleware"
+	oteltrace "go.opentelemetry.io/otel/trace"
+	"os"
 )
 
 func main() {
-	// init dal
-	// dal.Init()
-	address := conf.GetConf().Hertz.Address
-	h := server.New(server.WithHostPorts(address))
+	_ = godotenv.Load()
 
-	registerMiddleware(h)
+	// 获取jwt密钥
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		panic("JWT_SECRET must be set")
+	}
+
+	mtl.InitMtl()
+	rpc.InitClient()
+	address := conf.GetConf().Hertz.Address
+
+	p := hertzotelprovider.NewOpenTelemetryProvider(
+		hertzotelprovider.WithSdkTracerProvider(mtl.TracerProvider),
+		hertzotelprovider.WithEnableMetrics(false),
+	)
+	defer p.Shutdown(context.Background())
+	tracer, cfg := hertzoteltracing.NewServerTracer(hertzoteltracing.WithCustomResponseHandler(func(ctx context.Context, c *app.RequestContext) {
+		c.Header("shop-trace-id", oteltrace.SpanFromContext(ctx).SpanContext().TraceID().String())
+	}))
+
+	h := server.New(server.WithHostPorts(address), server.WithTracer(
+		hertzprom.NewServerTracer(
+			"",
+			"",
+			hertzprom.WithRegistry(mtl.Registry),
+			hertzprom.WithDisableServer(true),
+		),
+	),
+		tracer,
+	)
+	h.LoadHTMLGlob("template/*")
+	h.Delims("{{", "}}")
+
+	h.Use(hertzoteltracing.ServerMiddleware(cfg))
+
+	registerMiddleware(h, jwtSecret)
 
 	// add a ping route to test
 	h.GET("/ping", func(c context.Context, ctx *app.RequestContext) {
@@ -38,32 +74,50 @@ func main() {
 
 	router.GeneratedRegister(h)
 
+	h.GET("sign-in", func(ctx context.Context, c *app.RequestContext) {
+		c.HTML(consts.StatusOK, "sign-in", utils.H{
+			"title": "登录",
+			"next":  c.Query("next"),
+		})
+	})
+	h.GET("sign-up", func(ctx context.Context, c *app.RequestContext) {
+		c.HTML(consts.StatusOK, "sign-up", utils.H{
+			"title": "注册",
+		})
+	})
+	h.GET("/redirect", func(ctx context.Context, c *app.RequestContext) {
+		c.HTML(consts.StatusOK, "about", utils.H{
+			"title": "错误",
+		})
+	})
+	if os.Getenv("GO_ENV") != "online" {
+		h.GET("/robots.txt", func(ctx context.Context, c *app.RequestContext) {
+			c.Data(consts.StatusOK, "text/plain", []byte(`User-agent: *
+Disallow: /`))
+		})
+	}
+
+	h.Static("/static", "./")
+
 	h.Spin()
 }
 
-func registerMiddleware(h *server.Hertz) {
-	// log
-	logger := hertzlogrus.NewLogger()
-	hlog.SetLogger(logger)
-	hlog.SetLevel(conf.LogLevel())
-	asyncWriter := &zapcore.BufferedWriteSyncer{
-		WS: zapcore.AddSync(&lumberjack.Logger{
-			Filename:   conf.GetConf().Hertz.LogFileName,
-			MaxSize:    conf.GetConf().Hertz.LogMaxSize,
-			MaxBackups: conf.GetConf().Hertz.LogMaxBackups,
-			MaxAge:     conf.GetConf().Hertz.LogMaxAge,
-		}),
-		FlushInterval: time.Minute,
-	}
-	hlog.SetOutput(asyncWriter)
-	h.OnShutdown = append(h.OnShutdown, func(ctx context.Context) {
-		asyncWriter.Sync()
-	})
-
+func registerMiddleware(h *server.Hertz, jwtSecret string) {
 	// pprof
 	if conf.GetConf().Hertz.EnablePprof {
 		pprof.Register(h)
 	}
+
+	store, err := redis.NewStore(100, "tcp", conf.GetConf().Redis.Address, "", []byte(os.Getenv("SESSION_SECRET")))
+	if err != nil {
+		panic(err)
+	}
+	store.Options(sessions.Options{MaxAge: 86400, Path: "/"})
+	rs, err := redis.GetRedisStore(store)
+	if err == nil {
+		rs.SetSerializer(sessions.JSONSerializer{})
+	}
+	h.Use(sessions.New("cloudwego-shop", store))
 
 	// gzip
 	if conf.GetConf().Hertz.EnableGzip {
@@ -78,6 +132,9 @@ func registerMiddleware(h *server.Hertz) {
 	// recovery
 	h.Use(recovery.Recovery())
 
+	h.OnShutdown = append(h.OnShutdown, mtl.Hooks...)
+
 	// cores
 	h.Use(cors.Default())
+	middleware.RegisterMiddleware(h, jwtSecret)
 }
