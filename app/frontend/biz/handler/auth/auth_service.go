@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/cloudwego/hertz/pkg/app"
+	hertzUtils "github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/meilingluolingluo/gomall/app/frontend/biz/service"
 	"github.com/meilingluolingluo/gomall/app/frontend/biz/utils"
@@ -43,14 +44,13 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := &common.Empty{}
-	resp, err = service.NewLoginService(ctx, c).Run(&req)
+	resp, err := service.NewLoginService(ctx, c).Run(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.HTML(consts.StatusOK, "sign-in", hertzUtils.H{"error": err})
 		return
 	}
 
-	utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+	c.Redirect(consts.StatusFound, []byte(resp))
 }
 
 // Logout .

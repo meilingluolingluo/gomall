@@ -2,11 +2,11 @@ package model
 
 import (
 	"context"
+
 	"gorm.io/gorm"
 )
 
 type User struct {
-	Base
 	Username       string `gorm:"unique"`
 	Email          string `gorm:"unique"`
 	PasswordHashed string

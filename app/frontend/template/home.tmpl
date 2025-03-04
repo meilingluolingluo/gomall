@@ -1,26 +1,253 @@
-<!-- templates/home.html -->
-{{define "home"}}
-{{template "header" .}}
-<div class="row">
-  {{range .Items}}
-  <div class="col-sm-6 col-md-4 mb-4">
-    <div class="thumbnail card">
-      <img src="{{.Image}}" alt="{{.Title}}" class="card-img-top">
-      <div class="card-body">
-        <h3 class="card-title">{{.Title}}</h3>
-        <p class="card-text">{{.Description}}</p>
-        <div class="d-flex justify-content-between align-items-center">
-          <p class="mb-0 fw-bold">${{.Price}}</p>
-          <div>
-            <button class="btn btn-outline-primary add-to-cart"
-                    data-id="{{.ID}}">Add to Cart</button>
-            <a href="/item/{{.ID}}" class="btn btn-primary">View</a>
+{{ define "home" }}
+{{ template "header" . }}
+
+<div class="container mt-4">
+  <div class="row">
+    <!-- Sidebar - 商品分类 -->
+    <div class="col-md-3">
+      <div class="card border-0 shadow-lg rounded mb-5 animate__animated animate__fadeInLeft">
+        <div class="card-header bg-primary text-white text-center py-3">
+          <h5 class="card-title mb-0">全部商品分类</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-book fa-lg text-primary me-2"></i>
+            <a href="/category/book" class="text-decoration-none text-dark">图书、数字商品</a>
+          </li>
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-mobile-alt fa-lg text-success me-2"></i>
+            <a href="/category/phone" class="text-decoration-none text-dark">手机、数码、充值</a>
+          </li>
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-home fa-lg text-info me-2"></i>
+            <a href="/category/electricity" class="text-decoration-none text-dark">家用电器</a>
+          </li>
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-pen-fancy fa-lg text-warning me-2"></i>
+            <a href="/category/accessories" class="text-decoration-none text-dark">文具配件</a>
+          </li>
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-desktop fa-lg text-danger me-2"></i>
+            <a href="/category/computer" class="text-decoration-none text-dark">电脑、办公</a>
+          </li>
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-carrot fa-lg text-success me-2"></i>
+            <a href="/category/food" class="text-decoration-none text-dark">食品生鲜</a>
+          </li>
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-tshirt fa-lg text-primary me-2"></i>
+            <a href="/category/clothes" class="text-decoration-none text-dark">服饰内衣</a>
+          </li>
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-dumbbell fa-lg text-info me-2"></i>
+            <a href="/category/health" class="text-decoration-none text-dark">运动健康</a>
+          </li>
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-car-side fa-lg text-warning me-2"></i>
+            <a href="/category/car" class="text-decoration-none text-dark">汽车用品</a>
+          </li>
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-ticket-alt fa-lg text-danger me-2"></i>
+            <a href="/category/travel" class="text-decoration-none text-dark">彩票、旅行</a>
+          </li>
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-spa fa-lg text-success me-2"></i>
+            <a href="/category/makeup" class="text-decoration-none text-dark">个护化妆</a>
+          </li>
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-baby-carriage fa-lg text-primary me-2"></i>
+            <a href="/category/toys" class="text-decoration-none text-dark">母婴玩具</a>
+          </li>
+          <li class="list-group-item d-flex align-items-center">
+            <i class="fas fa-gem fa-lg text-info me-2"></i>
+            <a href="/category/jewelry" class="text-decoration-none text-dark">珠宝文玩</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 今日推荐 - 动画效果 -->
+      <div class="card border-0 shadow-lg rounded small-recommendation-card animate__animated animate__bounceIn">
+        <a href="/category/recommend" class="text-decoration-none text-dark">
+          <div class="card-header bg-danger text-white text-center py-3">
+            <h5 class="card-title mb-0">今日推荐</h5>
+          </div>
+          <div class="card-body p-2">
+            <div class="text-center">
+              <img src="/static/image/recommend.jpg" class="img-fluid mb-3 rounded" alt="今日推荐" style="max-height: 250px; object-fit: cover;">
+              <h6 class="text-danger fw-bold animate__animated animate__pulse animate__infinite">限时特惠</h6>
+              <p class="text-muted small">爆款商品低至1折</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 主内容 - 商品列表 -->
+    <div class="col-md-9">
+      <div class="row">
+        {{ range $.items }}
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+          <div class="card h-100 border-0 shadow-lg rounded animate__animated animate__fadeInUp">
+            <a href="/product?id={{ .Id }}" class="text-decoration-none text-dark">
+              <img src="{{ .Picture }}" class="card-img-top rounded-top" alt="{{ .Name }}"
+                   style="max-height: 250px; object-fit: cover;" loading="lazy">
+              <div class="card-body d-flex flex-column justify-content-between p-3">
+                <h5 class="card-title">{{ .Name }}</h5>
+                <p class="card-text text-danger fw-bold">¥{{ .Price }}</p>
+                <button class="btn btn-primary btn-sm w-100 animate__animated animate__bounceIn">查看详情</button>
+              </div>
+            </a>
+          </div>
+        </div>
+        {{ end }}
+      </div>
+
+      <!-- 今日推荐 - 网格布局 + 动画 -->
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <div class="card border-0 shadow-lg rounded animate__animated animate__slideInRight">
+            <div class="card-body p-3">
+              <div class="row g-3">
+                <div class="col-md-3 mb-3">
+                  <div class="card recommendation-card h-100 border-0 shadow-lg rounded animate__animated animate__zoomIn">
+                    <a href="/product?id=23" class="text-decoration-none text-dark">
+                      <img src="/static/image/Picture001.png" class="card-img-top rounded" alt="优质好货" loading="lazy">
+                      <div class="card-body p-2">
+                        <h6 class="card-title text-primary">优质好货</h6>
+                        <p class="card-text text-muted">满300减100</p>
+                        <span class="badge bg-danger rounded-pill animate__animated animate__heartBeat animate__infinite">闪购</span>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <div class="card recommendation-card h-100 border-0 shadow-lg rounded animate__animated animate__zoomIn" style="animation-delay: 0.2s;">
+                    <a href="/product?id=22" class="text-decoration-none text-dark">
+                      <img src="/static/image/Picture006.png" class="card-img-top rounded" alt="品牌尾货" loading="lazy">
+                      <div class="card-body p-2">
+                        <h6 class="card-title text-success">品牌尾货</h6>
+                        <p class="card-text text-muted">满150减20</p>
+                        <span class="badge bg-info rounded-pill animate__animated animate__heartBeat animate__infinite">团购</span>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <div class="card recommendation-card h-100 border-0 shadow-lg rounded animate__animated animate__zoomIn" style="animation-delay: 0.4s;">
+                    <a href="/product?id=20" class="text-decoration-none text-dark">
+                      <img src="/static/image/Picture009.jpg" class="card-img-top rounded" alt="时尚穿搭" loading="lazy">
+                      <div class="card-body p-2">
+                        <h6 class="card-title text-warning">时尚穿搭</h6>
+                        <p class="card-text text-muted">低至3.6折</p>
+                        <span class="badge bg-danger rounded-pill animate__animated animate__heartBeat animate__infinite">闪购</span>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <div class="card recommendation-card h-100 border-0 shadow-lg rounded animate__animated animate__zoomIn" style="animation-delay: 0.6s;">
+                    <a href="/product?id=21" class="text-decoration-none text-dark">
+                      <img src="/static/image/Picture012.jpg" class="card-img-top rounded" alt="0点上新" loading="lazy">
+                      <div class="card-body p-2">
+                        <h6 class="card-title text-info">0点上新</h6>
+                        <p class="card-text text-muted">全场包邮</p>
+                        <span class="badge bg-info rounded-pill animate__animated animate__heartBeat animate__infinite">闪购</span>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  {{end}}
 </div>
-{{template "footer" .}}
-{{end}}
+
+<style>
+  /* 通用样式 */
+  .recommendation-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .recommendation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .recommendation-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .recommendation-card .card-body {
+    padding: 10px;
+  }
+
+  .recommendation-card .card-title {
+    font-size: 16px;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .recommendation-card .card-text {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+  }
+
+  .recommendation-card .badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .small-recommendation-card {
+    max-width: 380px;
+    margin: auto;
+  }
+
+  .small-recommendation-card .card-body {
+    padding: 10px;
+  }
+
+  .small-recommendation-card img {
+    max-height: 250px;
+    object-fit: cover;
+  }
+
+  /* 动画样式 */
+  .animate__animated {
+    --animate-duration: 1s;
+    --animate-delay: 0.5s;
+  }
+
+  /* 自定义 hover 动画 */
+  .card:hover .card-img-top {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+
+  /* 按钮动画 */
+  .btn-primary {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    transform: scale(1.05);
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+</style>
+
+<!-- 加载 Animate.css 动画库 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+{{ template "footer" . }}
+
+{{ end }}

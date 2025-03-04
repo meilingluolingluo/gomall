@@ -1,0 +1,89 @@
+{{ define "footer" }}
+</div>
+</main>
+<footer class="bg-primary text-white">
+    <div class="container py-4">
+        <div class="row">
+            <!-- 社交媒体链接 -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h5>联系我们</h5>
+                <p>© 2025 CloudWeGo (<a class="text-white" href="https://github.com/meilingluolingluo/gomall">源码地址</a>)</p>
+                <div class="footer-social">
+                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <!-- 快速链接 -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h5>快速链接</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/about" class="text-white">关于我们</a></li>
+                    <li><a href="#" class="text-white" data-bs-toggle="modal" data-bs-target="#wechatModal">联系我们</a>
+                    </li>
+                    <li><a href="/" class="text-white">隐私政策</a></li>
+                    <li><a href="/" class="text-white">服务条款</a></li>
+                </ul>
+            </div>
+
+            <!-- 客户支持 -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h5>客户支持</h5>
+                <ul class="list-unstyled">
+                    <li><a href="https://github.com/meilingluolingluo?tab=repositories" class="text-white">常见问题</a></li>
+                    <li><a href="https://github.com/meilingluolingluo?tab=repositories" class="text-white">帮助中心</a></li>
+                    <li><a href="https://github.com/meilingluolingluo?tab=repositories" class="text-white">反馈意见</a></li>
+                </ul>
+            </div>
+
+            <!-- 订阅我们的新闻 -->
+            <div class="col-lg-3 col-md-6">
+                <h5>订阅我们的新闻</h5>
+                <p>获取最新的产品更新和特别优惠。</p>
+                <form action="">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="您的邮箱地址" aria-label="Recipient's username"
+                               aria-describedby="button-addon2">
+                        <button class="btn btn-outline-light" type="button" id="button-addon2">订阅</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 返回顶部按钮 -->
+    <button onclick="topFunction()" id="backToTopBtn" title="回到顶部"
+            class="btn btn-secondary rounded-circle position-fixed bottom-0 end-0 m-4">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- JavaScript 文件 -->
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"
+            integrity="sha512-GWzVrcGlo0TxTRvz9ttioyYJ+Wwk9Ck0G81D+eO63BaqHaJ3YZX9wuqjwgfcV/MrB2PhaVX9DkYVhbFpStnqpQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        // 返回顶部按钮显示逻辑
+        window.onscroll = function () { scrollFunction() };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                document.getElementById("backToTopBtn").style.display = "block";
+            } else {
+                document.getElementById("backToTopBtn").style.display = "none";
+            }
+        }
+
+        // 当点击按钮时滚动到页面顶部
+        function topFunction() {
+            document.body.scrollTop = 0; // 对于 Safari
+            document.documentElement.scrollTop = 0; // 对于 Chrome, Firefox, IE 和 Opera
+        }
+    </script>
+</footer>
+</body>
+
+</html>
+{{ end }}

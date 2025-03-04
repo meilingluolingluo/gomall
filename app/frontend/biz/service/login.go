@@ -2,10 +2,12 @@ package service
 
 import (
 	"context"
-
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/hertz-contrib/sessions"
 	auth "github.com/meilingluolingluo/gomall/app/frontend/hertz_gen/frontend/auth"
-	common "github.com/meilingluolingluo/gomall/app/frontend/hertz_gen/frontend/common"
+	"github.com/meilingluolingluo/gomall/app/frontend/infra/rpc"
+	frontendutils "github.com/meilingluolingluo/gomall/app/frontend/utils"
+	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/user"
 )
 
 type LoginService struct {
@@ -17,11 +19,23 @@ func NewLoginService(Context context.Context, RequestContext *app.RequestContext
 	return &LoginService{RequestContext: RequestContext, Context: Context}
 }
 
-func (h *LoginService) Run(req *auth.LoginReq) (resp *common.Empty, err error) {
-	//defer func() {
-	// hlog.CtxInfof(h.Context, "req = %+v", req)
-	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
-	//}()
-	// todo edit your code
-	return
+func (h *LoginService) Run(req *auth.LoginReq) (resp string, err error) {
+	res, err := rpc.UserClient.Login(h.Context, &user.LoginReq{Email: req.Email, Password: req.Password})
+	if err != nil {
+		return
+	}
+
+	session := sessions.Default(h.RequestContext)
+	session.Set("user_id", res.UserId)
+	err = session.Save()
+	frontendutils.MustHandleError(err)
+	redirect := "/"
+	if frontendutils.ValidateNext(req.Next) {
+		redirect = req.Next
+	}
+	if err != nil {
+		return "", err
+	}
+
+	return redirect, nil
 }
