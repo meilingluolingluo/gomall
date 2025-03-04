@@ -21,6 +21,7 @@ require (
 	github.com/meilingluolingluo/gomall/rpc_gen v0.0.0-00010101000000-000000000000
 	github.com/redis/go-redis/v9 v9.7.1
 	go.uber.org/zap v1.27.0
+	google.golang.org/genproto v0.0.0-20230822172742-b8732ec3820d // indirect; 显式指定较新版本
 	google.golang.org/protobuf v1.36.5
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gopkg.in/validator.v2 v2.0.1
@@ -81,6 +82,6 @@ require (
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.24.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	google.golang.org/genproto v0.0.0-20210513213006-bf773b8c8384 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20230803162519-f966b187b2e5 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

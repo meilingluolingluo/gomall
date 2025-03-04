@@ -10,6 +10,8 @@ require (
 	google.golang.org/protobuf v1.33.0
 )
 
+require google.golang.org/genproto v0.0.0-20210513213006-bf773b8c8384 // indirect
+
 require (
 	github.com/bytedance/gopkg v0.1.1 // indirect
 	github.com/bytedance/sonic v1.12.7 // indirect
@@ -45,6 +47,5 @@ require (
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.19.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	google.golang.org/genproto v0.0.0-20210513213006-bf773b8c8384 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
