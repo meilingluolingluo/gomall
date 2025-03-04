@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hertz-contrib/sessions"
 	"github.com/hertz-contrib/sessions/redis"
+	"github.com/meilingluolingluo/gomall/app/frontend/infra/rpc"
 	"github.com/meilingluolingluo/gomall/app/frontend/middleware"
 	"log"
 	"net/http"
@@ -31,7 +32,7 @@ import (
 )
 
 func main() {
-
+	rpc.Init()
 	hlog.SetLevel(hlog.LevelDebug)
 	_ = godotenv.Load()
 	address := conf.GetConf().Hertz.Address
@@ -52,26 +53,27 @@ func main() {
 
 	router.GeneratedRegister(h)
 	h.LoadHTMLGlob("template/*")
-	h.GET("sign-in", func(ctx context.Context, c *app.RequestContext) {
-		c.HTML(consts.StatusOK, "sign-in", utils.H{
-			"title": "登录",
-			"next":  c.Query("next"),
-		})
-	})
-	h.GET("sign-up", func(ctx context.Context, c *app.RequestContext) {
-		c.HTML(consts.StatusOK, "sign-up", utils.H{
-			"title": "注册",
-		})
-	})
+	h.Delims("{{", "}}")
+
 	h.GET("/redirect", func(ctx context.Context, c *app.RequestContext) {
 		c.HTML(consts.StatusOK, "about", utils.H{
 			"title": "错误",
 		})
 	})
-	h.GET("/about", middleware.Auth(), func(ctx context.Context, c *app.RequestContext) {
-		c.HTML(consts.StatusOK, "about", utils.H{
-			"title": "关于我们",
-		})
+	h.GET("/about", middleware.Auth(), func(c context.Context, ctx *app.RequestContext) {
+		ctx.HTML(http.StatusOK, "about", utils.H{"Title": "About"})
+	})
+
+	h.GET("/sign-in", func(c context.Context, ctx *app.RequestContext) {
+		data := utils.H{
+			"Title": "Sign In",
+			"Next":  ctx.Query("next"),
+		}
+		ctx.HTML(consts.StatusOK, "sign-in", data)
+	})
+
+	h.GET("/sign-up", func(c context.Context, ctx *app.RequestContext) {
+		ctx.HTML(consts.StatusOK, "sign-up", utils.H{"Title": "Sign Up"})
 	})
 	if os.Getenv("GO_ENV") != "online" {
 		h.GET("/robots.txt", func(ctx context.Context, c *app.RequestContext) {

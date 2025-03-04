@@ -7,12 +7,44 @@ option go_package="/user";
 service UserService {
     rpc Register(RegisterReq) returns (RegisterResp) {}
     rpc Login(LoginReq) returns (LoginResp) {}
+    rpc GetPersonal(GetPersonalReq) returns (GetPersonalResp) {}
+    rpc UpdatePwd(UpdatePwdReq) returns (UpdatePwdResp) {}
+    rpc Delete(DeleteReq) returns (DeleteResp) {}
+}
+
+message DeleteReq {
+    int32 user_id = 1;
+}
+
+message DeleteResp {}
+
+message UpdatePwdReq {
+    int32 user_id = 1;
+    string oldpassword = 2;
+    string newpassword = 3;
+}
+
+message UpdatePwdResp {
+    int32 user_id = 1;
+    string username = 2;
+    string email = 3;
+}
+
+message GetPersonalReq {
+    int32 user_id = 1;
+}
+
+message GetPersonalResp {
+    string email = 1;
+    string password = 2;
+    string username = 3;
 }
 
 message RegisterReq {
     string email = 1;
     string password = 2;
     string confirm_password = 3;
+    string username = 4;
 }
 
 message RegisterResp {
@@ -26,4 +58,5 @@ message LoginReq {
 
 message LoginResp {
     int32 user_id = 1;
+    string username = 2;
 }

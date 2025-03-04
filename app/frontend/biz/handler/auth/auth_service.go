@@ -23,14 +23,12 @@ func Register(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := &common.Empty{}
-	resp, err = service.NewRegisterService(ctx, c).Run(&req)
+	_, err = service.NewRegisterService(ctx, c).Run(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.HTML(consts.StatusOK, "sign-up", hertzUtils.H{"error": err})
 		return
 	}
-
-	utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+	c.Redirect(consts.StatusFound, []byte("/"))
 }
 
 // Login .
@@ -71,5 +69,65 @@ func Logout(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
+	utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+}
+
+// Getpersonal .
+// @router /personal [GET]
+func Getpersonal(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req common.Empty
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+
+	resp, err := service.NewGetpersonalService(ctx, c).Run(&req)
+
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+	utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+}
+
+// UpdatePwd .
+// @router /auth/update [POST]
+func UpdatePwd(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req auth.UpdatePwdReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+
+	resp, err := service.NewUpdatePwdService(ctx, c).Run(&req)
+
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+	utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+}
+
+// Delete .
+// @router /auth/delete [POST]
+func Delete(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req common.Empty
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+
+	resp, err := service.NewDeleteService(ctx, c).Run(&req)
+
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
 	utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }

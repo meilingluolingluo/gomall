@@ -30,3 +30,18 @@ func _registerMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _getpersonalMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _deleteMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatepwdMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

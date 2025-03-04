@@ -24,3 +24,30 @@ func Login(ctx context.Context, req *user.LoginReq, callOptions ...callopt.Optio
 	}
 	return resp, nil
 }
+
+func GetPersonal(ctx context.Context, req *user.GetPersonalReq, callOptions ...callopt.Option) (resp *user.GetPersonalResp, err error) {
+	resp, err = defaultClient.GetPersonal(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "GetPersonal call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func UpdatePwd(ctx context.Context, req *user.UpdatePwdReq, callOptions ...callopt.Option) (resp *user.UpdatePwdResp, err error) {
+	resp, err = defaultClient.UpdatePwd(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "UpdatePwd call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func Delete(ctx context.Context, req *user.DeleteReq, callOptions ...callopt.Option) (resp *user.DeleteResp, err error) {
+	resp, err = defaultClient.Delete(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "Delete call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}

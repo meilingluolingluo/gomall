@@ -13,6 +13,9 @@ import (
 type Client interface {
 	Register(ctx context.Context, Req *user.RegisterReq, callOptions ...callopt.Option) (r *user.RegisterResp, err error)
 	Login(ctx context.Context, Req *user.LoginReq, callOptions ...callopt.Option) (r *user.LoginResp, err error)
+	GetPersonal(ctx context.Context, Req *user.GetPersonalReq, callOptions ...callopt.Option) (r *user.GetPersonalResp, err error)
+	UpdatePwd(ctx context.Context, Req *user.UpdatePwdReq, callOptions ...callopt.Option) (r *user.UpdatePwdResp, err error)
+	Delete(ctx context.Context, Req *user.DeleteReq, callOptions ...callopt.Option) (r *user.DeleteResp, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -52,4 +55,19 @@ func (p *kUserServiceClient) Register(ctx context.Context, Req *user.RegisterReq
 func (p *kUserServiceClient) Login(ctx context.Context, Req *user.LoginReq, callOptions ...callopt.Option) (r *user.LoginResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.Login(ctx, Req)
+}
+
+func (p *kUserServiceClient) GetPersonal(ctx context.Context, Req *user.GetPersonalReq, callOptions ...callopt.Option) (r *user.GetPersonalResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetPersonal(ctx, Req)
+}
+
+func (p *kUserServiceClient) UpdatePwd(ctx context.Context, Req *user.UpdatePwdReq, callOptions ...callopt.Option) (r *user.UpdatePwdResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.UpdatePwd(ctx, Req)
+}
+
+func (p *kUserServiceClient) Delete(ctx context.Context, Req *user.DeleteReq, callOptions ...callopt.Option) (r *user.DeleteResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.Delete(ctx, Req)
 }

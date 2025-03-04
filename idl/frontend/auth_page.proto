@@ -11,6 +11,7 @@ message RegisterReq {
   string email = 1 [(api.form) = "email"];
   string password = 2 [(api.form) = "password"];
   string confirm_password = 3 [(api.form) = "confirm_password"];
+  string username = 4 [(api.form) = "username"];
 }
 
 message LoginReq {
@@ -18,6 +19,13 @@ message LoginReq {
   string password = 2 [(api.form) = "password"];
   string next = 3 [(api.query) = "next"];
 }
+
+message UpdatePwdReq {
+  string oldpassword = 1 [(api.form) = "oldpassword"];
+  string newpassword = 2 [(api.form) = "newpassword"];
+}
+
+
 
 service AuthService {
   rpc register(RegisterReq) returns (common.Empty) {
@@ -28,5 +36,14 @@ service AuthService {
   }
   rpc logout(common.Empty) returns (common.Empty) {
     option (api.post) = "/auth/logout";
+  }
+  rpc getpersonal(common.Empty) returns (common.Empty) {
+    option (api.get) = "/personal";
+  }
+  rpc updatePwd(UpdatePwdReq) returns (common.Empty) {
+    option (api.post) = "/auth/update";
+  }
+  rpc delete(common.Empty) returns (common.Empty) {
+    option (api.post) = "/auth/delete";
   }
 }

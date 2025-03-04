@@ -2,14 +2,16 @@ package model
 
 import (
 	"context"
+	"fmt"
 
 	"gorm.io/gorm"
 )
 
 type User struct {
+	gorm.Model
+	Email          string `gorm:"uniqueIndex;type:varchar(255) not null"`
+	PasswordHashed string `gorm:"type:varchar(255) not null"`
 	Username       string `gorm:"unique"`
-	Email          string `gorm:"unique"`
-	PasswordHashed string
 }
 
 func (u User) TableName() string {
@@ -21,8 +23,20 @@ func GetByEmail(db *gorm.DB, ctx context.Context, email string) (user *User, err
 	return
 }
 
-func Create(db *gorm.DB, ctx context.Context, user *User) error {
-	return db.WithContext(ctx).Create(user).Error
+func Create(db *gorm.DB, user *User) error {
+	tx := db.Begin() // 开启事务
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback() // 发生异常时回滚
+		}
+	}()
+
+	if err := tx.Create(user).Error; err != nil {
+		tx.Rollback() // 创建失败时回滚
+		return fmt.Errorf("failed to create user: %w", err)
+	}
+
+	return tx.Commit().Error // 提交事务
 }
 
 // GetByID 根据用户ID获取用户信息

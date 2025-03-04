@@ -22,3 +22,24 @@ func (s *UserServiceImpl) Login(ctx context.Context, req *user.LoginReq) (resp *
 
 	return resp, err
 }
+
+// GetPersonal implements the UserServiceImpl interface.
+func (s *UserServiceImpl) GetPersonal(ctx context.Context, req *user.GetPersonalReq) (resp *user.GetPersonalResp, err error) {
+	resp, err = service.NewGetPersonalService(ctx).Run(req)
+
+	return resp, err
+}
+
+// UpdatePwd implements the UserServiceImpl interface.
+func (s *UserServiceImpl) UpdatePwd(ctx context.Context, req *user.UpdatePwdReq) (resp *user.UpdatePwdResp, err error) {
+	resp, err = service.NewUpdatePwdService(ctx).Run(req)
+
+	return resp, err
+}
+
+// Delete implements the UserServiceImpl interface.
+func (s *UserServiceImpl) Delete(ctx context.Context, req *user.DeleteReq) (resp *user.DeleteResp, err error) {
+	resp, err = service.NewDeleteService(ctx).Run(req)
+
+	return resp, err
+}

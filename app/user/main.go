@@ -1,6 +1,10 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
+	consul "github.com/kitex-contrib/registry-consul"
+	"github.com/meilingluolingluo/gomall/app/user/biz/dal"
+	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/user/userservice"
 	"net"
 	"time"
 
@@ -9,17 +13,20 @@ import (
 	"github.com/cloudwego/kitex/server"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 	"github.com/meilingluolingluo/gomall/app/user/conf"
-	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/user/userservice"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		klog.Error("load .env error - %v", err.Error())
+	}
+	dal.Init()
 	opts := kitexInit()
-
 	svr := userservice.NewServer(new(UserServiceImpl), opts...)
 
-	err := svr.Run()
+	err = svr.Run()
 	if err != nil {
 		klog.Error(err.Error())
 	}
@@ -37,7 +44,12 @@ func kitexInit() (opts []server.Option) {
 	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 		ServiceName: conf.GetConf().Kitex.Service,
 	}))
-
+	// Consul 注册
+	r, err := consul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
+	if err != nil {
+		klog.Fatalf("Failed to create Consul registry: %v", err)
+	}
+	opts = append(opts, server.WithRegistry(r))
 	// klog
 	logger := kitexlogrus.NewLogger()
 	klog.SetLogger(logger)
@@ -53,7 +65,10 @@ func kitexInit() (opts []server.Option) {
 	}
 	klog.SetOutput(asyncWriter)
 	server.RegisterShutdownHook(func() {
-		asyncWriter.Sync()
+		err := asyncWriter.Sync()
+		if err != nil {
+			return
+		}
 	})
 	return
 }

@@ -1,54 +1,37 @@
-<!-- templates/sign-up.html -->
-{{define "sign-up"}}
-{{template "header" .}}
-
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card mt-5">
-                <div class="card-body">
-                    <h2 class="text-center mb-4">Sign Up</h2>
-
-                    <!-- 登录表单 -->
-                    <form id="signinForm" action="/auth/register" method="POST">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email address {{template "required"}}</label>
-                            <input type="email" class="form-control" id="email" name="email"
-                                   placeholder="Enter your email" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password {{template "required"}}</label>
-                            <input type="password" class="form-control" id="password" name="password"
-                                   placeholder="Enter your password" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="password_confirm" class="form-label">Password Confirm {{template "required"}}</label>
-                            <input type="password" class="form-control" id="password_confirm" name="password_confirm"
-                                   placeholder="Enter your password again" required>
-                        </div>
-
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="remember">
-                            <label class="form-check-label" for="remember">Remember me</label>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100">Sign In</button>
-                    </form>
-
-                    <!-- 附加链接 -->
-                    <div class="text-center mt-3">
-                        <a href="/forgot-password" class="text-muted">Forgot password?</a>
-                    </div>
-                    <div class="text-center mt-2">
-                        <p>Already have an account? <a href="/sign-in">Sign up</a></p>
-                    </div>
-                </div>
+{{ define "sign-up" }}
+{{ template "header" . }}
+<div class="container d-flex flex-column align-items-center justify-content-center p-5">
+    <div class="w-50 mx-auto">
+        <form method="post" action="/auth/register">
+            <div class="mb-3">
+                <label for="username" class="form-label">用户名 {{template "required"}}</label>
+                <input type="text" class="form-control" id="username" name="username" required minlength="3"
+                       maxlength="20" pattern="[\u4e00-\u9fa5a-zA-Z0-9_]+" title="仅支持中文、英文、数字和下划线">
             </div>
-        </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">电子邮箱 {{template "required"}}</label>
+                <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp"
+                       placeholder="example@domain.com">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">登录密码 {{template "required"}}</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="至少8位字符，包含字母和数字">
+            </div>
+            <div class="mb-3">
+                <label for="confirm_password" class="form-label">确认密码 {{template "required"}}</label>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                       placeholder="请再次输入密码">
+            </div>
+            <div class="mb-3 text-center">
+                <span class="text-muted">已有账号？</span>
+                <a href="/sign-in" class="text-decoration-none">立即登录</a>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg"><i
+                        class="fa-solid fa-user-plus me-2"></i>注册账号</button>
+            </div>
+        </form>
     </div>
 </div>
-
-{{template "footer" .}}
-{{end}}
+{{ template "footer" . }}
+{{ end }}
