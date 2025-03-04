@@ -24,21 +24,3 @@ func Login(ctx context.Context, req *user.LoginReq, callOptions ...callopt.Optio
 	}
 	return resp, nil
 }
-
-func Delete(ctx context.Context, req *user.DeleteReq, callOptions ...callopt.Option) (resp *user.DeleteResp, err error) {
-	resp, err = defaultClient.Delete(ctx, req, callOptions...)
-	if err != nil {
-		klog.CtxErrorf(ctx, "Delete call failed,err =%+v", err)
-		return nil, err
-	}
-	return resp, nil
-}
-
-func Modify(ctx context.Context, req *user.ModifyReq, callOptions ...callopt.Option) (resp *user.ModifyResp, err error) {
-	resp, err = defaultClient.Modify(ctx, req, callOptions...)
-	if err != nil {
-		klog.CtxErrorf(ctx, "Modify call failed,err =%+v", err)
-		return nil, err
-	}
-	return resp, nil
-}
