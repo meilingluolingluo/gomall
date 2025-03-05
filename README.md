@@ -129,7 +129,6 @@ cd gomall
 ### Overview
 GoMall is a microservices-based e-commerce platform built with Go and the CloudWeGo framework (Hertz and Kitex), designed to provide a feature-rich, high-performance online shopping system. The project adopts a front-end and back-end separation architecture, including core functionalities such as user services, product services, shopping carts, order processing, payment settlement, notification services, and more. It supports distributed service discovery (Consul), database optimization (MySQL, Redis), distributed tracing (OpenTelemetry), and containerized deployment (Docker/Kubernetes).
 
-This project serves as a learning and practice platform for backend development, suitable for showcasing in job applications, featuring technical highlights like distributed system design, high-concurrency handling, AI recommendations, and blockchain applications.
 
 ### Features
 - **User Management**:
