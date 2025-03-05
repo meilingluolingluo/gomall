@@ -4,4 +4,5 @@ use (
 	app/frontend
 	rpc_gen
 	app/user
+	.
 )
