@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	common "github.com/meilingluolingluo/gomall/app/frontend/hertz_gen/frontend/common"
 	product "github.com/meilingluolingluo/gomall/app/frontend/hertz_gen/frontend/product"
