@@ -2,9 +2,10 @@ package service
 
 import (
 	"context"
+	"log"
 
 	"github.com/cloudwego/kitex/pkg/kerrors"
-	"github.com/meilingluolingluo/gomall/app/cart/biz/dal/mysql"
+	"github.com/meilingluolingluo/gomall/app/order/biz/dal/mysql"
 	"github.com/meilingluolingluo/gomall/app/order/model"
 	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/cart"
 	order "github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/order"
@@ -24,13 +25,15 @@ func (s *ListOrderService) Run(req *order.ListOrderReq) (resp *order.ListOrderRe
 	if err != nil {
 		return nil, kerrors.NewBizStatusError(500001, err.Error())
 	}
-
 	var orders []*order.Order
 	for _, v := range list {
 		var items []*order.OrderItem
 		for _, oi := range v.OrderItems {
 			items = append(items, &order.OrderItem{
-				Item: &cart.CartItem{},
+				Item: &cart.CartItem{
+					ProductId: uint32(oi.ProductId),
+					Quantity:  int32(oi.Quantity),
+				},
 				Cost: float32(oi.Cost),
 			})
 		}
@@ -52,5 +55,6 @@ func (s *ListOrderService) Run(req *order.ListOrderReq) (resp *order.ListOrderRe
 	resp = &order.ListOrderResp{
 		Orders: orders,
 	}
+	log.Printf("resp: %v", resp)
 	return
 }

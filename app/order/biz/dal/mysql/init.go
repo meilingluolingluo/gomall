@@ -124,3 +124,16 @@ func Init(cfg *Config) error {
 	klog.Infof("MySQL connection initialized successfully with DSN: %s", dsn)
 	return nil
 }
+
+func InitTest() error {
+	dsn := "root:001220@tcp(172.30.16.1:3306)/orders?charset=utf8mb4&parseTime=True&loc=Local"
+	var err error
+	DB, err = gorm.Open(mysql.Open(dsn),
+		&gorm.Config{},
+	)
+	if err != nil {
+		return err
+	}
+	log.Printf("MySQL connection initialized successfully with DSN: %s", dsn)
+	return nil
+}

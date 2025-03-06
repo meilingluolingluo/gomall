@@ -2,10 +2,11 @@ package service
 
 import (
 	"context"
+	"log"
 
 	"github.com/cloudwego/kitex/pkg/kerrors"
 	"github.com/google/uuid"
-	"github.com/meilingluolingluo/gomall/app/cart/biz/dal/mysql"
+	"github.com/meilingluolingluo/gomall/app/order/biz/dal/mysql"
 	"github.com/meilingluolingluo/gomall/app/order/model"
 	order "github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/order"
 	"gorm.io/gorm"
@@ -24,7 +25,7 @@ func (s *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrde
 	if len(req.OrderItems) == 0 {
 		err = kerrors.NewGRPCBizStatusError(2004001, "order items is required")
 	}
-
+	log.Printf("using mysql %v", mysql.DB)
 	err = mysql.DB.Transaction(func(tx *gorm.DB) error {
 		orderId, _ := uuid.NewUUID()
 
@@ -71,5 +72,9 @@ func (s *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrde
 
 		return nil
 	})
+
+	if err != nil {
+		return nil, kerrors.NewBizStatusError(500001, err.Error())
+	}
 	return
 }

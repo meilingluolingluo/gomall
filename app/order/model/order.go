@@ -35,3 +35,29 @@ func ListOrders(ctx context.Context, db *gorm.DB, userId uint32) ([]*Order, erro
 	}
 	return orders, nil
 }
+
+// 删除订单函数
+func DeleteOrder(ctx context.Context, db *gorm.DB, userId uint, orderId string) error {
+	result := db.WithContext(ctx).Where("user_id = ? AND order_id = ?", userId, orderId).Delete(&Order{})
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}
+
+// 更新订单函数
+func UpdateOrder(ctx context.Context, db *gorm.DB, userId uint, orderId string, consignee *Consignee) error {
+	result := db.WithContext(ctx).Model(&Order{}).Where("user_id = ? AND order_id = ?", userId, orderId).Updates(Order{
+		Consignee: *consignee,
+	})
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}

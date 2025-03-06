@@ -3,15 +3,46 @@ package service
 import (
 	"context"
 	"testing"
+
+	"github.com/meilingluolingluo/gomall/app/order/biz/dal/mysql"
+	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/cart"
 	order "github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/order"
 )
 
 func TestPlaceOrder_Run(t *testing.T) {
 	ctx := context.Background()
 	s := NewPlaceOrderService(ctx)
+	mysql.InitTest()
 	// init req and assert value
+	req := &order.PlaceOrderReq{
+		UserId:       123,
+		UserCurrency: "USD",
+		Email:        "test@example.com",
+		OrderItems: []*order.OrderItem{
+			{
+				Item: &cart.CartItem{
+					ProductId: 10086,
+					Quantity:  2001,
+				},
+				Cost: 19.99,
+			},
+			{
+				Item: &cart.CartItem{
+					ProductId: 10057,
+					Quantity:  2006,
+				},
+				Cost: 189.99,
+			},
+		},
+		Address: &order.Address{
+			StreetAddress: "123 Main St",
+			City:          "Anytown",
+			State:         "CA",
+			Country:       "USA",
+			ZipCode:       12345,
+		},
+	}
 
-	req := &order.PlaceOrderReq{}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)
 	t.Logf("resp: %v", resp)
