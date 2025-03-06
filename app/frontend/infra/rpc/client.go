@@ -24,7 +24,7 @@ var (
 
 func Init() {
 	once.Do(func() {
-		// initUserClient()
+		initUserClient()
 		initProductClient()
 		initCartClient()
 	})
@@ -51,6 +51,6 @@ func initCartClient() {
 	r, err := consul.NewConsulResolver(conf.GetConf().Hertz.RegistryAddr)
 	frontendutils.MustHandleError(err)
 	opts = append(opts, client.WithResolver(r))
-	ProductClient, err = productcatalogservice.NewClient("cart", opts...)
+	CartClient, err = cartservice.NewClient("cart", opts...)
 	frontendutils.MustHandleError(err)
 }

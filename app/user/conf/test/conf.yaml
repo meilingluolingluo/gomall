@@ -1,6 +1,6 @@
 kitex:
   service: "user"
-  address: "192.168.31.106:8888"
+  address: ":8888"
   metrics_port: ":9991"
   log_level: debug
   log_file_name: "log/kitex.log"
@@ -10,15 +10,15 @@ kitex:
 
 registry:
   registry_address:
-    - 192.168.31.106:8500
+    - 172.30.16.1:8500
   username: ""
   password: ""
 
 mysql:
-  dsn: "%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn: "%s:%s@tcp(%s:3306)/user?charset=utf8mb4&parseTime=True&loc=Local"
 
 redis:
-  address: "192.168.31.106:6379"
+  address: "172.30.16.1:6379"
   username: ""
   password: ""
   db: 0

@@ -3,12 +3,13 @@ package service
 import (
 	"context"
 	"fmt"
+	"time"
+
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/hertz-contrib/sessions"
 	"github.com/meilingluolingluo/gomall/app/frontend/hertz_gen/frontend/common"
 	"github.com/meilingluolingluo/gomall/app/frontend/infra/rpc"
 	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/user"
-	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	auth "github.com/meilingluolingluo/gomall/app/frontend/hertz_gen/frontend/auth"

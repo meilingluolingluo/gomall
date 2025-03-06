@@ -1,6 +1,6 @@
 kitex:
-  service: "product"
-  address: ":8887"
+  service: "order"
+  address: ":8886"
   log_level: info
   log_file_name: "log/kitex.log"
   log_max_size: 10
@@ -14,7 +14,7 @@ registry:
   password: ""
 
 mysql:
-  dsn: "%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn: "%s:%s@tcp(%s:3306)/product?charset=utf8mb4&parseTime=True&loc=Local"
 
 redis:
   address: "172.30.16.1:6379"
