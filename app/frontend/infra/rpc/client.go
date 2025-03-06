@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/cart/cartservice"
+	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/checkout/checkoutservice"
 	"sync"
 
 	"github.com/cloudwego/kitex/client"
@@ -13,12 +14,13 @@ import (
 )
 
 var (
-	UserClient    userservice.Client
-	once          sync.Once
-	err           error
-	commonSuite   client.Option
-	ProductClient productcatalogservice.Client
-	CartClient    cartservice.Client
+	UserClient     userservice.Client
+	once           sync.Once
+	err            error
+	commonSuite    client.Option
+	ProductClient  productcatalogservice.Client
+	CartClient     cartservice.Client
+	CheckoutClient checkoutservice.Client
 )
 
 func Init() {
@@ -26,6 +28,7 @@ func Init() {
 		initUserClient()
 		initProductClient()
 		initCartClient()
+		initCheckoutClient()
 	})
 }
 
@@ -51,5 +54,14 @@ func initCartClient() {
 	frontendutils.MustHandleError(err)
 	opts = append(opts, client.WithResolver(r))
 	ProductClient, err = productcatalogservice.NewClient("cart", opts...)
+	frontendutils.MustHandleError(err)
+}
+
+func initCheckoutClient() {
+	var opts []client.Option
+	r, err := consul.NewConsulResolver(conf.GetConf().Hertz.RegistryAddr)
+	frontendutils.MustHandleError(err)
+	opts = append(opts, client.WithResolver(r))
+	ProductClient, err = productcatalogservice.NewClient("checkout", opts...)
 	frontendutils.MustHandleError(err)
 }

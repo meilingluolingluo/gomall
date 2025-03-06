@@ -6,4 +6,7 @@ use (
 	app/user
 	app/cart
 	.
+	app/payment
+	app/checkout
+	app/product
 )

@@ -2,9 +2,9 @@ package product
 
 import (
 	"context"
-	product "github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/product"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
+	product "github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/product"
 )
 
 func ListProducts(ctx context.Context, req *product.ListProductsReq, callOptions ...callopt.Option) (resp *product.ListProductsResp, err error) {
@@ -29,6 +29,33 @@ func SearchProducts(ctx context.Context, req *product.SearchProductsReq, callOpt
 	resp, err = defaultClient.SearchProducts(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "SearchProducts call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func CreateProduct(ctx context.Context, req *product.CreateProductReq, callOptions ...callopt.Option) (resp *product.CreateProductResp, err error) {
+	resp, err = defaultClient.CreateProduct(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "CreateProduct call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func DeleteProduct(ctx context.Context, req *product.DeleteProductReq, callOptions ...callopt.Option) (resp *product.DeleteProductResp, err error) {
+	resp, err = defaultClient.DeleteProduct(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "DeleteProduct call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func UpdateProduct(ctx context.Context, req *product.UpdateProductReq, callOptions ...callopt.Option) (resp *product.UpdateProductResp, err error) {
+	resp, err = defaultClient.UpdateProduct(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "UpdateProduct call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil

@@ -1,0 +1,30 @@
+{{ define "waiting" }}
+{{ template "header" . }}
+{{ if .payment_url }}
+<!-- 支付宝支付自动跳转 -->
+<meta http-equiv="refresh" content="0;url={{ .payment_url }}">
+<script>
+    // 检测是否在iframe中（支付宝支付页面通常会重定向到外链）
+    if (window.self === window.top) {
+        window.location.href = "{{ .payment_url }}";
+    }
+</script>
+{{ else }}
+<div class="d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <div class="text-center">
+        <div class="h3 text-danger mb-4">
+            稍等片刻，系统正在创建订单
+        </div>
+        <div class="spinner-grow text-primary mx-1" role="status"></div>
+        <div class="spinner-grow text-secondary mx-1" role="status"></div>
+        <div class="spinner-grow text-success mx-1" role="status"></div>
+        <div class="spinner-grow text-danger mx-1" role="status"></div>
+        <div class="spinner-grow text-warning mx-1" role="status"></div>
+        <div class="spinner-grow text-info mx-1" role="status"></div>
+        <div class="spinner-grow text-light mx-1" role="status"></div>
+        <div class="spinner-grow text-dark mx-1" role="status"></div>
+    </div>
+</div>
+{{ end }}
+{{ template "footer" . }}
+{{ end }}

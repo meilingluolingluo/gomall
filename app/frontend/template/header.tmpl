@@ -5,6 +5,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {{ if $.redirect }}
+  <meta http-equiv="refresh" content="5;url=/checkout/result" />
+  {{ end}}
   <title>Mall Go - Online Shopping</title>
   <link href="/static/css/bootstrap.min.css" rel="stylesheet"> <!-- 替换为本地 CSS -->
   <style>
