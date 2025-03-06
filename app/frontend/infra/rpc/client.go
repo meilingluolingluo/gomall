@@ -1,8 +1,9 @@
 package rpc
 
 import (
-	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/cart/cartservice"
 	"sync"
+
+	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/cart/cartservice"
 
 	"github.com/cloudwego/kitex/client"
 	consul "github.com/kitex-contrib/registry-consul"
@@ -23,7 +24,7 @@ var (
 
 func Init() {
 	once.Do(func() {
-		initUserClient()
+		// initUserClient()
 		initProductClient()
 		initCartClient()
 	})
