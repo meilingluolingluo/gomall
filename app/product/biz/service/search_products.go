@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log"
 
 	"github.com/meilingluolingluo/gomall/app/product/biz/dal/mysql"
 	"github.com/meilingluolingluo/gomall/app/product/model"
@@ -30,5 +31,8 @@ func (s *SearchProductsService) Run(req *product.SearchProductsReq) (resp *produ
 			Price:       v.Price,
 		})
 	}
-	return
+	log.Printf("result = %v", result)
+	return &product.SearchProductsResp{
+		Results: result,
+	}, err
 }

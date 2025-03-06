@@ -21,21 +21,23 @@ var (
 
 func Init() {
 	once.Do(func() {
-		initUserClient()
+		// initUserClient()
 		initProductClient()
 	})
 }
 
 func initUserClient() {
-	UserClient, err = userservice.NewClient("user", commonSuite)
+	r, err := consul.NewConsulResolver(conf.GetConf().Hertz.RegistryAddr)
+	frontendutils.MustHandleError(err)
+	UserClient, err = userservice.NewClient("user", client.WithResolver(r))
 	frontendutils.MustHandleError(err)
 }
 
 func initProductClient() {
-	var opts []client.Option
-	r, err := consul.NewConsulRegister(conf.GetConf().Hertz.RegistryAddr)
+	// var opts []client.Option
+	r, err := consul.NewConsulResolver(conf.GetConf().Hertz.RegistryAddr)
 	frontendutils.MustHandleError(err)
-	opts = append(opts, client.WithResolver(r))
-	ProductClient, err = productcatalogservice.NewClient("product", opts)
+	// opts = append(opts, client.WithResolver(r))
+	ProductClient, err = productcatalogservice.NewClient("product", client.WithResolver(r))
 	frontendutils.MustHandleError(err)
 }

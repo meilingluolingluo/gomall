@@ -4,8 +4,10 @@ import (
 	"context"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	common "github.com/meilingluolingluo/gomall/app/frontend/hertz_gen/frontend/common"
+	"github.com/cloudwego/hertz/pkg/common/utils"
 	product "github.com/meilingluolingluo/gomall/app/frontend/hertz_gen/frontend/product"
+	"github.com/meilingluolingluo/gomall/app/frontend/infra/rpc"
+	rpcproduct "github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/product"
 )
 
 type GetProductService struct {
@@ -17,11 +19,20 @@ func NewGetProductService(Context context.Context, RequestContext *app.RequestCo
 	return &GetProductService{RequestContext: RequestContext, Context: Context}
 }
 
-func (h *GetProductService) Run(req *product.ProductReq) (resp *common.Empty, err error) {
+func (h *GetProductService) Run(req *product.ProductReq) (resp map[string]any, err error) {
 	//defer func() {
 	// hlog.CtxInfof(h.Context, "req = %+v", req)
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
 	//}()
 	// todo edit your code
-	return
+	p, err := rpc.ProductClient.GetProduct(h.Context, &rpcproduct.GetProductReq{
+		Id: req.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return utils.H{
+		"item": p.Product,
+	}, nil
 }
