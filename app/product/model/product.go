@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -25,12 +26,14 @@ type ProductQuery struct {
 }
 
 func (p ProductQuery) GetByID(productid uint32) (product Product, err error) {
-	err = p.db.WithContext(p.ctx).Model(&Product{}).First(&product, productid).Error
+	err = p.db.WithContext(p.ctx).Model(&Product{}).Find(&product, productid).Error
 	return
 }
 
 func (p ProductQuery) SearchProducts(q string) (products []*Product, err error) {
-	err = p.db.WithContext(p.ctx).Model(&Product{}).Find(&products, "name like ? description like ?", "%"+q+"%", "%"+q+"%").Error
+	log.Printf("q = %s", q)
+	err = p.db.WithContext(p.ctx).Model(&Product{}).Where("name LIKE ? OR description LIKE ?", "%"+q+"%", "%"+q+"%").Find(&products).Error
+	log.Printf("products = %v", products)
 	return
 }
 

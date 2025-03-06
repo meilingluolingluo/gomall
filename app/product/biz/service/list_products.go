@@ -19,7 +19,6 @@ func NewListProductsService(ctx context.Context) *ListProductsService {
 func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.ListProductsResp, err error) {
 	// Finish your business logic.
 	categoryQuery := model.NewCategoryQuery(s.ctx, mysql.DB)
-
 	c, err := categoryQuery.GetProductByCategoryName(req.CategoryName)
 	resp = &product.ListProductsResp{}
 	for _, v1 := range c {
@@ -33,5 +32,6 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 			})
 		}
 	}
+
 	return resp, nil
 }
