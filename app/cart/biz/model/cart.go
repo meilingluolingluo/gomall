@@ -11,18 +11,22 @@ import (
 
 type Cart struct {
 	gorm.Model
-	UserId    uint32 `json:"user_id"`
-	ProductId uint32 `json:"product_id"`
-	Qty       int32  `json:"qty"`
+	UserId    uint32 `gorm:"type:int(11);not null;index:idx_user_id"`
+	ProductId uint32 `gorm:"type:int(11);not null;"`
+	Qty       uint32 `gorm:"type:int(11);not null;"`
 }
 
 func (c Cart) TableName() string {
 	return "cart"
 }
 
-func GetCartByUserId(db *gorm.DB, ctx context.Context, userId uint32) (cartList []*Cart, err error) {
-	err = db.Debug().WithContext(ctx).Model(&Cart{}).Find(&cartList, "user_id = ?", userId).Error
-	return cartList, err
+func GetCartByUserId(ctx context.Context, db *gorm.DB, userId uint32) ([]*Cart, error) {
+	var rows []*Cart
+	err := db.WithContext(ctx).
+		Model(&Cart{}).
+		Where(&Cart{UserId: userId}).
+		Find(&rows).Error
+	return rows, err
 }
 
 /*
