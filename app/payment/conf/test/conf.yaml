@@ -9,7 +9,7 @@ kitex:
 
 registry:
   registry_address:
-    - 127.0.0.1:8500
+    - 192.168.31.106:8500
   username: ""
   password: ""
 
@@ -17,7 +17,16 @@ mysql:
   dsn: "%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local"
 
 redis:
-  address: "127.0.0.1:6379"
+  address: "192.168.31.106:6379"
   username: ""
   password: ""
   db: 0
+alipay:
+  app_id: "9021000144678563"  # 沙箱APP_ID（已正确配置）
+  private_key: "conf/alipay_private_key.pem"  # 指向私钥文件路径
+  alipay_public_path: "conf/alipayPublicCert.crt"  # 支付宝公钥证书
+  app_cert_path: "conf/appPublicCert.crt"  # 应用公钥证书
+  alipay_root_cert_path: "conf/alipayRootCert.crt"  # 支付宝根证书
+  notify_url: "http://192.168.31.106:8080/checkout/result"  # 本地测试通知地址(部署到服务器上时，把localhost换成服务器公网ip)
+  return_url: "http://192.168.31.106/checkout/result"  # 前端结果页地址 (部署到服务器上时，把localhost换成服务器公网ip)
+  is_production: false  # 沙箱环境必须为false

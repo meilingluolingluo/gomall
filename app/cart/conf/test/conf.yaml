@@ -1,6 +1,6 @@
 kitex:
-  service: "user"
-  address: "192.168.31.106:8889"
+  service: "cart"
+  address: "192.168.31.106:8891"
   metrics_port: ":9999"
   log_level: debug
   log_file_name: "log/kitex.log"

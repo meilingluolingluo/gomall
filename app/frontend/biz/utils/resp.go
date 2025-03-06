@@ -3,7 +3,6 @@ package utils
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/hertz-contrib/sessions"
 	"github.com/meilingluolingluo/gomall/app/frontend/infra/rpc"
 	frontendutils "github.com/meilingluolingluo/gomall/app/frontend/utils"
 	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/cart"
@@ -22,16 +21,19 @@ func SendSuccessResponse(ctx context.Context, c *app.RequestContext, code int, d
 }
 
 func WarpResponse(ctx context.Context, c *app.RequestContext, content map[string]any) map[string]any {
-	var cartNum int
-	session := sessions.Default(c)
 	userId := frontendutils.GetUserIdFromCtx(ctx)
-	cartResp, _ := rpc.CartClient.GetCart(ctx, &cart.GetCartReq{UserId: userId})
-	if cartResp != nil && cartResp.Cart != nil {
-		cartNum = len(cartResp.Cart.Items)
+	username := frontendutils.GetUserNameFromCtx(ctx)
+	content["user_id"] = userId
+	content["username"] = username
+
+	if userId > 0 {
+		cartResp, err := rpc.CartClient.GetCart(ctx, &cart.GetCartReq{
+			UserId: uint32(userId),
+		})
+		if err == nil && cartResp != nil {
+			content["cart_num"] = len(cartResp.Items)
+		}
 	}
-	content["user_id"] = ctx.Value(frontendutils.SessionUserId)
-	Username := session.Get("user_name")
-	content["user_name"] = Username
-	content["cart_num"] = cartNum
+
 	return content
 }

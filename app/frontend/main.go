@@ -11,11 +11,6 @@ import (
 
 	"github.com/hertz-contrib/sessions"
 	"github.com/hertz-contrib/sessions/redis"
-	"github.com/meilingluolingluo/gomall/app/frontend/infra/rpc"
-	"github.com/meilingluolingluo/gomall/app/frontend/middleware"
-
-	"github.com/hertz-contrib/sessions"
-	"github.com/hertz-contrib/sessions/redis"
 	"github.com/meilingluolingluo/gomall/app/frontend/middleware"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -38,7 +33,7 @@ import (
 )
 
 func main() {
-	rpc.Init()
+	rpc.InitClient()
 	hlog.SetLevel(hlog.LevelDebug)
 	_ = godotenv.Load()
 	address := conf.GetConf().Hertz.Address
@@ -51,7 +46,6 @@ func main() {
 		},
 	)))
 	registerMiddleware(h)
-	rpc.Init()
 	// add a ping route to test
 	h.GET("/ping", func(c context.Context, ctx *app.RequestContext) {
 		ctx.JSON(consts.StatusOK, utils.H{"ping": "pong"})
@@ -95,7 +89,7 @@ Disallow: /`))
 func registerMiddleware(h *server.Hertz) {
 	// log
 	store, _ := redis.NewStore(10, "tcp", conf.GetConf().Redis.Address, "", []byte(os.Getenv("SESSION_SECRET")))
-	h.Use(sessions.New("cloudwego-shop", store))
+	h.Use(sessions.New("shop", store))
 	logger := hertzlogrus.NewLogger()
 	hlog.SetLogger(logger)
 	hlog.SetLevel(conf.LogLevel())
@@ -136,4 +130,5 @@ func registerMiddleware(h *server.Hertz) {
 
 	// cores
 	h.Use(cors.Default())
+	middleware.RegisterMiddleware(h)
 }

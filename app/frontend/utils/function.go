@@ -9,3 +9,10 @@ func GetUserIdFromCtx(ctx context.Context) uint32 {
 	}
 	return userId.(uint32)
 }
+func GetUserNameFromCtx(ctx context.Context) string {
+	userName := ctx.Value(SessionUserName)
+	if userName == nil {
+		return "Hello!"
+	}
+	return userName.(string)
+}
