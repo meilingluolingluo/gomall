@@ -30,6 +30,10 @@ func (s *DeleteOrderService) Run(req *order.DeleteOrderReq) (resp *order.DeleteO
 		if err := model.DeleteOrder(s.ctx, tx, uint(req.UserId), req.OrderId); err != nil {
 			return err
 		}
+
+		if err := model.DeleteOrderItem(s.ctx, tx, req.OrderId); err != nil {
+			return err
+		}
 		return nil
 	})
 

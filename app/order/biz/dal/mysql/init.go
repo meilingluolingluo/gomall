@@ -134,6 +134,7 @@ func InitTest() error {
 	if err != nil {
 		return err
 	}
+
 	log.Printf("MySQL connection initialized successfully with DSN: %s", dsn)
 	return nil
 }

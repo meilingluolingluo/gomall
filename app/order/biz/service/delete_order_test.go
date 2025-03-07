@@ -15,7 +15,7 @@ func TestDeleteOrder_Run(t *testing.T) {
 	// init req and assert value
 	req := &order.DeleteOrderReq{
 		UserId:  123,
-		OrderId: "a94972d8-fa8f-11ef-addf-0242ac110002",
+		OrderId: "657bba7c-fb05-11ef-ace7-0242ac110002",
 	}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)

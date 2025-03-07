@@ -16,8 +16,8 @@ func TestPlaceOrder_Run(t *testing.T) {
 	// init req and assert value
 	req := &order.PlaceOrderReq{
 		UserId:       123,
-		UserCurrency: "USD",
-		Email:        "test@example.com",
+		UserCurrency: "RMB",
+		Email:        "金闪闪@example.com",
 		OrderItems: []*order.OrderItem{
 			{
 				Item: &cart.CartItem{
@@ -29,7 +29,7 @@ func TestPlaceOrder_Run(t *testing.T) {
 			{
 				Item: &cart.CartItem{
 					ProductId: 10057,
-					Quantity:  2006,
+					Quantity:  20060,
 				},
 				Cost: 189.99,
 			},

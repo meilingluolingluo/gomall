@@ -25,7 +25,7 @@ func (s *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrde
 	if len(req.OrderItems) == 0 {
 		err = kerrors.NewGRPCBizStatusError(2004001, "order items is required")
 	}
-	log.Printf("using mysql %v", mysql.DB)
+	// log.Printf("using mysql %v", mysql.DB)
 	err = mysql.DB.Transaction(func(tx *gorm.DB) error {
 		orderId, _ := uuid.NewUUID()
 
@@ -44,9 +44,10 @@ func (s *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrde
 			o.Consignee.City = a.City
 			o.Consignee.Country = a.Country
 			o.Consignee.State = a.State
+			o.PaymentStatus = model.PaymentStatusPending
 		}
 
-		if err := tx.Create(&o).Error; err != nil {
+		if err := model.CreateOrder(s.ctx, tx, &o); err != nil {
 			return err
 		}
 
@@ -60,7 +61,7 @@ func (s *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrde
 			})
 		}
 
-		if err := tx.Create(items).Error; err != nil {
+		if err := model.CreateOrderItem(s.ctx, tx, &items); err != nil {
 			return err
 		}
 
@@ -69,7 +70,7 @@ func (s *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrde
 				OrderId: orderId.String(),
 			},
 		}
-
+		log.Println("Transaction logic completed successfully")
 		return nil
 	})
 
