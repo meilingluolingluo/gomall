@@ -9,6 +9,7 @@ import (
 	consul "github.com/kitex-contrib/registry-consul"
 	"github.com/meilingluolingluo/gomall/app/frontend/conf"
 	frontendutils "github.com/meilingluolingluo/gomall/app/frontend/utils"
+	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/order/orderservice"
 	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/product/productcatalogservice"
 	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/user/userservice"
 )
@@ -20,6 +21,7 @@ var (
 	commonSuite   client.Option
 	ProductClient productcatalogservice.Client
 	CartClient    cartservice.Client
+	OrderClient   orderservice.Client
 )
 
 func Init() {
@@ -27,6 +29,7 @@ func Init() {
 		initUserClient()
 		initProductClient()
 		initCartClient()
+		initOrderClient()
 	})
 }
 
@@ -39,7 +42,7 @@ func initUserClient() {
 
 func initProductClient() {
 	var opts []client.Option
-	r, err := consul.NewConsulResolver(conf.GetConf().Hertz.RegistryAddr)
+	r, err := consul.NewConsulResolver("172.30.16.1:8500")
 	frontendutils.MustHandleError(err)
 	opts = append(opts, client.WithResolver(r))
 	ProductClient, err = productcatalogservice.NewClient("product", opts...)
@@ -52,5 +55,14 @@ func initCartClient() {
 	frontendutils.MustHandleError(err)
 	opts = append(opts, client.WithResolver(r))
 	CartClient, err = cartservice.NewClient("cart", opts...)
+	frontendutils.MustHandleError(err)
+}
+
+func initOrderClient() {
+	var opts []client.Option
+	r, err := consul.NewConsulResolver("172.30.16.1:8500")
+	frontendutils.MustHandleError(err)
+	opts = append(opts, client.WithResolver(r))
+	OrderClient, err = orderservice.NewClient("order", opts...)
 	frontendutils.MustHandleError(err)
 }

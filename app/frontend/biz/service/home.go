@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"log"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/utils"
@@ -37,7 +36,7 @@ func (h *HomeService) Run(req *common.Empty) (res map[string]any, err error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("p = %+v", p)
+
 	return utils.H{
 		"Title": "Category",
 		"items": p.Products,

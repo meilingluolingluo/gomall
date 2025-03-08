@@ -131,4 +131,6 @@ func registerMiddleware(h *server.Hertz) {
 
 	// cores
 	h.Use(cors.Default())
+
+	middleware.RegisterMiddleware(h)
 }

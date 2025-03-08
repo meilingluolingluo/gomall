@@ -1,0 +1,57 @@
+{{ define "home" }}
+{{ template "header" . }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .order {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .order-item {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .order-item img {
+            max-width: 100px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ .title }}</h1>
+    {{ range .orders }}
+    <div class="order">
+        <h2>Order ID: {{ .OrderId }}</h2>
+        <p>Date: {{ .CreateData }}</p>
+        <p>Total Cost: ${{ .Cost }}</p>
+        <p>Payment Status: {{ .PaymentStatus }}</p>
+        <h3>Items:</h3>
+        {{ range .OrderItems }}
+        <div class="order-item">
+            <p>Product: {{ .ProductName }}</p>
+            <p>Quantity: {{ .Quantity }}</p>
+            <p>Cost: ${{ .Cost }}</p>
+            <img src="{{ .Picture }}" alt="{{ .ProductName }}">
+        </div>
+        {{ end }}
+    </div>
+    {{ end }}
+</body>
+</html>
+
+
+{{ template "footer" . }}
+
+{{ end }}
