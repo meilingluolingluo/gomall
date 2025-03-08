@@ -50,7 +50,9 @@
             <span class="cart-count" id="cartCount">{{if $.cart_num}}{{$.cart_num}}{{else}}0{{end}}</span>
           </a>
         </li>
-
+        <li class="nav-item">
+          <a href="/order" class="nav-link btn btn-success btn-sm">我的订单</a>
+        </li>
         <li class="nav-item dropdown">
           {{if .username}}
           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -70,8 +72,6 @@
           <a class="nav-link" href="/sign-in">Login</a>
           {{end}}
         </li>
-
-
       </ul>
     </div>
   </div>

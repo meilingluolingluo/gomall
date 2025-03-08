@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	jwt "github.com/golang-jwt/jwt/v5"
@@ -45,14 +46,19 @@ func (h *RegisterService) Run(req *auth.RegisterReq) (resp *common.Empty, err er
 		ConfirmPassword: req.ConfirmPassword,
 	})
 	if err != nil {
+		log.Printf("Error Register: %v", err)
 		return nil, err
 	}
+
+	log.Printf("Error")
 
 	// 设置session
 	session := sessions.Default(h.RequestContext)
 	session.Set("user_id", userResp.UserId)
+	session.Set("username", req.Username)
 	err = session.Save()
 	if err != nil {
+		log.Printf("Error saving session: %v", err)
 		return nil, err
 	}
 

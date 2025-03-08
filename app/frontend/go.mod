@@ -30,7 +30,10 @@ require (
 	gorm.io/gorm v1.25.12
 )
 
-require github.com/kitex-contrib/registry-consul v0.1.0
+require (
+	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/kitex-contrib/registry-consul v0.1.0
+)
 
 require (
 	github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da // indirect
@@ -56,7 +59,6 @@ require (
 	github.com/felixge/fgprof v0.9.3 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
-	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/gomodule/redigo v1.8.9 // indirect
 	github.com/google/pprof v0.0.0-20240727154555-813a5fbdbec8 // indirect

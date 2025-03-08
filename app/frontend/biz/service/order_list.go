@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -33,6 +34,7 @@ func (h *OrderListService) Run(req *common.Empty) (resp map[string]any, err erro
 	orderResp, err := rpc.OrderClient.ListOrder(h.Context, &order.ListOrderReq{
 		UserId: userId,
 	})
+	log.Printf("userId: %d", userId)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +59,7 @@ func (h *OrderListService) Run(req *common.Empty) (resp map[string]any, err erro
 			p := productResp.Product
 			items = append(items, types.OrderItem{
 				ProductName: p.Name,
-				Quantity:    i.Quantity,
+				Quantity:    int32(i.Quantity),
 				Cost:        float64(v.Cost),
 				Picture:     p.Picture,
 			})
@@ -72,6 +74,7 @@ func (h *OrderListService) Run(req *common.Empty) (resp map[string]any, err erro
 		})
 	}
 
+	log.Printf("orders list %v", list)
 	return utils.H{
 		"title":  "Order",
 		"orders": list,

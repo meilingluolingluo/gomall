@@ -4,11 +4,13 @@ package order
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/meilingluolingluo/gomall/app/frontend/middleware"
 )
 
 func rootMw() []app.HandlerFunc {
 	// your code...
-	return nil
+
+	return []app.HandlerFunc{middleware.Auth()}
 }
 
 func _orderMw() []app.HandlerFunc {

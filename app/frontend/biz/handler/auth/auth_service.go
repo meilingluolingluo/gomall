@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"log"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	hertzUtils "github.com/cloudwego/hertz/pkg/common/utils"
@@ -22,12 +23,13 @@ func Register(ctx context.Context, c *app.RequestContext) {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
-
+	log.Printf("register")
 	_, err = service.NewRegisterService(ctx, c).Run(&req)
 	if err != nil {
 		c.HTML(consts.StatusOK, "sign-up", hertzUtils.H{"error": err})
 		return
 	}
+	log.Printf("Redirect")
 	c.Redirect(consts.StatusFound, []byte("/"))
 }
 

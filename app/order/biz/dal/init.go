@@ -7,5 +7,8 @@ import (
 
 func Init() {
 	redis.Init()
-	mysql.Init()
+	err := mysql.Init(mysql.DefaultConfig())
+	if err != nil {
+		return
+	}
 }

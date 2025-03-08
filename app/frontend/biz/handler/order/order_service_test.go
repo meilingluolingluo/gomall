@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/cloudwego/hertz/pkg/app/server"
-	"github.com/meilingluolingluo/gomall/app/frontend/infra/rpc"
 
 	//"github.com/cloudwego/hertz/pkg/common/test/assert"
 
@@ -13,7 +12,7 @@ import (
 )
 
 func TestOrderList(t *testing.T) {
-	rpc.Init()
+
 	h := server.Default()
 	h.GET("/order", OrderList)
 	path := "/order?userId=123"                               // todo: you can customize query

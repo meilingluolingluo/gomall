@@ -17,13 +17,14 @@ import (
 )
 
 var (
-	UserClient    userservice.Client
-	once          sync.Once
-	err           error
-	commonSuite   client.Option
-	ProductClient productcatalogservice.Client
-	CartClient    cartservice.Client
-	OrderClient   orderservice.Client
+	UserClient     userservice.Client
+	once           sync.Once
+	err            error
+	commonSuite    client.Option
+	ProductClient  productcatalogservice.Client
+	CartClient     cartservice.Client
+	OrderClient    orderservice.Client
+	CheckoutClient checkoutservice.Client
 )
 
 func InitClient() {
@@ -32,7 +33,7 @@ func InitClient() {
 		initProductClient()
 		initCartClient()
 		initOrderClient()
-		initCheckoutClient()
+		// initCheckoutClient()
 	})
 }
 
@@ -45,7 +46,7 @@ func initUserClient() {
 
 func initProductClient() {
 	var opts []client.Option
-	r, err := consul.NewConsulResolver("172.30.16.1:8500")
+	r, err := consul.NewConsulResolver(conf.GetConf().Hertz.RegistryAddr)
 	frontendutils.MustHandleError(err)
 	opts = append(opts, client.WithResolver(r))
 	ProductClient, err = productcatalogservice.NewClient("product", opts...)
@@ -63,7 +64,7 @@ func initCartClient() {
 
 func initOrderClient() {
 	var opts []client.Option
-	r, err := consul.NewConsulResolver("172.30.16.1:8500")
+	r, err := consul.NewConsulResolver(conf.GetConf().Hertz.RegistryAddr)
 	frontendutils.MustHandleError(err)
 	opts = append(opts, client.WithResolver(r))
 	OrderClient, err = orderservice.NewClient("order", opts...)

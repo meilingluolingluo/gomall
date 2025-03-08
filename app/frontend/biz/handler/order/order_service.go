@@ -2,7 +2,6 @@ package order
 
 import (
 	"context"
-	"log"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -28,8 +27,7 @@ func OrderList(ctx context.Context, c *app.RequestContext) {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
-	log.Printf("resp order %v", resp)
-
+	// log.Printf("resp order %v", resp)
 	c.HTML(consts.StatusOK, "order", resp)
 }
 
