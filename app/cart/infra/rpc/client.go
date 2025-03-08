@@ -27,7 +27,7 @@ func Init() {
 	})
 }
 
-func initClient() {
+func initUserClient() {
 	r, err := consul.NewConsulResolver(conf.GetConf().Registry.RegistryAddress[0])
 	cartutils.MustHandleError(err)
 	UserClient, err = userservice.NewClient("user", client.WithResolver(r))
@@ -36,7 +36,7 @@ func initClient() {
 
 func initProductClient() {
 	var opts []client.Option
-	r, err := consul.NewConsulResolver(conf.GetConf().Registry.RegistryAddress[0])
+	r, err := consul.NewConsulResolver("192.168.31.106:8500")
 	cartutils.MustHandleError(err)
 	opts = append(opts, client.WithResolver(r))
 	ProductClient, err = productcatalogservice.NewClient("product", opts...)

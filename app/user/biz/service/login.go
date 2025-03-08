@@ -47,7 +47,7 @@ func (s *LoginService) Run(req *user.LoginReq) (resp *user.LoginResp, err error)
 	// fmt.Printf("[DEBUG] Login Success: user_id=%v, user_name=%v\n", int32(userRow.ID), userRow.Username)
 	// 返回新增的 username 字段
 	return &user.LoginResp{
-		UserId:   int32(userRow.ID),
+		UserId:   uint32(userRow.ID),
 		Username: userRow.Username,
 	}, nil
 

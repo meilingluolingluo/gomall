@@ -4,7 +4,7 @@ import (
 	"github.com/joho/godotenv"
 	consul "github.com/kitex-contrib/registry-consul"
 	"github.com/meilingluolingluo/gomall/app/cart/biz/dal"
-	"github.com/meilingluolingluo/gomall/app/cart/rpc"
+	"github.com/meilingluolingluo/gomall/app/cart/infra/rpc"
 	"net"
 	"time"
 

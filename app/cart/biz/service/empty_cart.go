@@ -18,9 +18,9 @@ func NewEmptyCartService(ctx context.Context) *EmptyCartService {
 // Run create note info
 func (s *EmptyCartService) Run(req *cart.EmptyCartReq) (resp *cart.EmptyCartResp, err error) {
 	// Finish your business logic.
-	err = model.EmptyCart(mysql.DB, s.ctx, req.UserId)
+	err = model.EmptyCart(s.ctx, mysql.DB, req.UserId)
 	if err != nil {
-		return nil, kerrors.NewBizStatusError(5003001, "product id is required")
+		return nil, kerrors.NewBizStatusError(50001, err.Error())
 	}
 	return &cart.EmptyCartResp{}, nil
 }
