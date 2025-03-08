@@ -3,6 +3,8 @@ package rpc
 import (
 	"sync"
 
+	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/checkout/checkoutservice"
+
 	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/cart/cartservice"
 
 	"github.com/cloudwego/kitex/client"
@@ -24,12 +26,13 @@ var (
 	OrderClient   orderservice.Client
 )
 
-func Init() {
+func InitClient() {
 	once.Do(func() {
 		initUserClient()
 		initProductClient()
 		initCartClient()
 		initOrderClient()
+		initCheckoutClient()
 	})
 }
 
@@ -64,5 +67,12 @@ func initOrderClient() {
 	frontendutils.MustHandleError(err)
 	opts = append(opts, client.WithResolver(r))
 	OrderClient, err = orderservice.NewClient("order", opts...)
+}
+func initCheckoutClient() {
+	var opts []client.Option
+	r, err := consul.NewConsulResolver(conf.GetConf().Hertz.RegistryAddr)
+	frontendutils.MustHandleError(err)
+	opts = append(opts, client.WithResolver(r))
+	CheckoutClient, err = checkoutservice.NewClient("checkout", opts...)
 	frontendutils.MustHandleError(err)
 }

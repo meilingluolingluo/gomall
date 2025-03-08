@@ -25,8 +25,11 @@ func (h *AddCartItemService) Run(req *cart.AddCartReq) (resp *common.Empty, err 
 		UserId: frontendutils.GetUserIdFromCtx(h.Context),
 		Item: &rpccart.CartItem{
 			ProductId: req.ProductId,
-			Quantity:  req.ProductNum,
+			Quantity:  uint32(req.ProductNum),
 		},
 	})
+	if err != nil {
+		return nil, err
+	}
 	return
 }

@@ -1,0 +1,14 @@
+{{ define "result" }}
+{{ template "header" . }}
+<div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 70vh;">
+    <i class="fa-regular fa-circle-check fs-1 text-success mb-3"></i>
+    <div class="text-center fs-3 mb-4">
+        商品已成功下单，正在快马加鞭送来的路上！.
+    </div>
+    <div class="d-flex gap-3">
+        <a href="/order" class="btn btn-info">查看订单</a>
+        <a href="/" class="btn btn-success">返回首页</a>
+    </div>
+</div>
+{{ template "footer" . }}
+{{ end }}

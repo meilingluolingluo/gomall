@@ -7,6 +7,7 @@ import (
 	auth "github.com/meilingluolingluo/gomall/app/frontend/biz/router/auth"
 	cart "github.com/meilingluolingluo/gomall/app/frontend/biz/router/cart"
 	category "github.com/meilingluolingluo/gomall/app/frontend/biz/router/category"
+	checkout "github.com/meilingluolingluo/gomall/app/frontend/biz/router/checkout"
 	home "github.com/meilingluolingluo/gomall/app/frontend/biz/router/home"
 	order "github.com/meilingluolingluo/gomall/app/frontend/biz/router/order"
 	product "github.com/meilingluolingluo/gomall/app/frontend/biz/router/product"
@@ -16,6 +17,7 @@ import (
 func GeneratedRegister(r *server.Hertz) {
 	//INSERT_POINT: DO NOT DELETE THIS LINE!
 	order.Register(r)
+	checkout.Register(r)
 
 	cart.Register(r)
 

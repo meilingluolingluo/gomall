@@ -33,7 +33,7 @@ import (
 )
 
 func main() {
-	rpc.Init()
+	rpc.InitClient()
 	hlog.SetLevel(hlog.LevelDebug)
 	_ = godotenv.Load()
 	address := conf.GetConf().Hertz.Address
@@ -90,7 +90,7 @@ Disallow: /`))
 func registerMiddleware(h *server.Hertz) {
 	// log
 	store, _ := redis.NewStore(10, "tcp", conf.GetConf().Redis.Address, "", []byte(os.Getenv("SESSION_SECRET")))
-	h.Use(sessions.New("cloudwego-shop", store))
+	h.Use(sessions.New("shop", store))
 	logger := hertzlogrus.NewLogger()
 	hlog.SetLogger(logger)
 	hlog.SetLevel(conf.LogLevel())
@@ -131,6 +131,5 @@ func registerMiddleware(h *server.Hertz) {
 
 	// cores
 	h.Use(cors.Default())
-
 	middleware.RegisterMiddleware(h)
 }
