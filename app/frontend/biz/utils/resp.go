@@ -26,13 +26,14 @@ func WarpResponse(ctx context.Context, c *app.RequestContext, content map[string
 	content["user_id"] = userId
 	content["username"] = username
 	if userId > 0 {
-
 		cartResp, err := rpc.CartClient.GetCart(ctx, &cart.GetCartReq{
 			UserId: frontendutils.GetUserIdFromCtx(ctx),
 		})
 		if err == nil && cartResp != nil {
 			content["cart_num"] = len(cartResp.Items)
 		}
+	} else {
+		content["cart_num"] = 0 // 未登录时购物车数量为 0
 	}
 
 	return content

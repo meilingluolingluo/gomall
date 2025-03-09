@@ -2,6 +2,7 @@ package product
 
 import (
 	"context"
+	hertzUtils "github.com/cloudwego/hertz/pkg/common/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -18,17 +19,17 @@ func GetProduct(ctx context.Context, c *app.RequestContext) {
 
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.HTML(consts.StatusOK, "product", utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
 		return
 	}
 
 	resp, err := service.NewGetProductService(ctx, c).Run(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.HTML(consts.StatusOK, "product", utils.WarpResponse(ctx, c, hertzUtils.H{"error": err}))
 		return
 	}
 
-	c.HTML(consts.StatusOK, "product", resp)
+	c.HTML(consts.StatusOK, "product", utils.WarpResponse(ctx, c, resp))
 }
 
 // SearchProducs .
@@ -38,15 +39,15 @@ func SearchProducs(ctx context.Context, c *app.RequestContext) {
 	var req product.SearchProductsReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.HTML(consts.StatusOK, "product", utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
 		return
 	}
 
 	resp, err := service.NewSearchProducsService(ctx, c).Run(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.HTML(consts.StatusOK, "product", utils.WarpResponse(ctx, c, hertzUtils.H{"error": err}))
 		return
 	}
 
-	c.HTML(consts.StatusOK, "search", resp)
+	c.HTML(consts.StatusOK, "product", utils.WarpResponse(ctx, c, resp))
 }

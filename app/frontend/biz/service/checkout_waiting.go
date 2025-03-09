@@ -8,7 +8,6 @@ import (
 	"github.com/meilingluolingluo/gomall/app/frontend/infra/rpc"
 	frontendutils "github.com/meilingluolingluo/gomall/app/frontend/utils"
 	rpccheckout "github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/checkout"
-	rpcpayment "github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/payment"
 )
 
 type CheckoutWaitingService struct {
@@ -34,12 +33,14 @@ func (h *CheckoutWaitingService) Run(req *checkout.CheckoutReq) (resp map[string
 			State:         req.Province,
 			StreetAddress: req.Street,
 		},
-		CreditCard: &rpcpayment.CreditCardInfo{
-			CreditCardNumber:          req.CardNum,
-			CreditCardExpirationYear:  req.ExpirationYear,
-			CreditCardExpirationMonth: req.ExpirationMonth,
-			CreditCardCvv:             req.Cvv,
-		},
+		/*
+			CreditCard: &rpcpayment.CreditCardInfo{
+				CreditCardNumber:          req.CardNum,
+				CreditCardExpirationYear:  req.ExpirationYear,
+				CreditCardExpirationMonth: req.ExpirationMonth,
+				CreditCardCvv:             req.Cvv,
+			},
+		*/
 	})
 	if err != nil {
 		return nil, err

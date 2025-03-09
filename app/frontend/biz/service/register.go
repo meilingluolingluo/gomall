@@ -46,11 +46,12 @@ func (h *RegisterService) Run(req *auth.RegisterReq) (resp *common.Empty, err er
 	if err != nil {
 		return nil, err
 	}
+	println("userResp:", userResp)
 
 	// 设置session
 	session := sessions.Default(h.RequestContext)
 	session.Set("user_id", userResp.UserId)
-
+	session.Set("username", userResp.Username)
 	err = session.Save()
 	if err != nil {
 		return nil, err

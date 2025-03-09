@@ -1,4 +1,3 @@
-<!-- templates/header.html -->
 {{define "header"}}
 <!DOCTYPE html>
 <html lang="en">
@@ -11,19 +10,37 @@
   <title>Mall Go - Online Shopping</title>
   <link href="/static/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    /* 之前的样式保持不变 */
+    .nav-link.dropdown-toggle {
+      padding: 0.5rem 1.5rem;
+      min-width: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .nav-link.dropdown-toggle:hover {
+      overflow: visible;
+      white-space: normal;
+    }
+    .navbar-nav.ms-auto {
+      margin-left: 1rem;
+    }
+    @media (max-width: 992px) {
+      .nav-link.dropdown-toggle {
+        min-width: 100px;
+        padding: 0.25rem 1rem;
+      }
+    }
   </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">Mall Go</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarNav" aria-controls="navbarNav">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" href="/">Home</a>
         </li>
@@ -43,16 +60,15 @@
         <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search" value="{{ .q }}">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
-      <ul class="navbar-nav">
+      <ul class="navbar-nav ms-auto">
         <li class="nav-item position-relative">
           <div class="ms-lg-3 d-none d-lg-block d-xl-block">
             {{ template "cart-num" . }}
           </div>
         </li>
-
         <li class="nav-item dropdown">
-          {{if .username}}
-          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          {{if and (ne .user_id nil) (gt .user_id 0)}}
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{.username}}">
             {{.username}}
           </a>
           <ul class="dropdown-menu" aria-labelledby="userDropdown">
@@ -69,8 +85,6 @@
           <a class="nav-link" href="/sign-in">Login</a>
           {{end}}
         </li>
-
-
       </ul>
     </div>
   </div>
