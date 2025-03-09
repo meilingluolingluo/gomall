@@ -13,7 +13,7 @@ func TestRegister_Run(t *testing.T) {
 	if err != nil {
 		return
 	}
-	mysql.Init()
+	mysql.Init(mysql.DefaultConfig())
 	ctx := context.Background()
 	s := NewRegisterService(ctx)
 	req := &user.RegisterReq{

@@ -23,6 +23,7 @@ func (s *RegisterService) Run(req *user.RegisterReq) (resp *user.RegisterResp, e
 	if req.Email == "" || req.Password == "" || req.ConfirmPassword == "" || req.Username == "" {
 		return nil, errors.New("email or password is empty")
 	}
+	println("username", req.Username)
 	// 验证密码正确性
 	if req.Password != req.ConfirmPassword {
 		return nil, errors.New("password not match")
@@ -43,5 +44,5 @@ func (s *RegisterService) Run(req *user.RegisterReq) (resp *user.RegisterResp, e
 		return nil, err
 	}
 
-	return &user.RegisterResp{UserId: int32(newUser.ID)}, nil
+	return &user.RegisterResp{UserId: uint32(newUser.ID), Username: newUser.Username}, nil
 }

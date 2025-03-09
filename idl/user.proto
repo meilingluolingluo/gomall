@@ -19,19 +19,19 @@ message DeleteReq {
 message DeleteResp {}
 
 message UpdatePwdReq {
-    int32 user_id = 1;
+    uint32 user_id = 1;
     string oldpassword = 2;
     string newpassword = 3;
 }
 
 message UpdatePwdResp {
-    int32 user_id = 1;
+    uint32 user_id = 1;
     string username = 2;
     string email = 3;
 }
 
 message GetPersonalReq {
-    int32 user_id = 1;
+    uint32 user_id = 1;
 }
 
 message GetPersonalResp {
@@ -48,7 +48,8 @@ message RegisterReq {
 }
 
 message RegisterResp {
-    int32 user_id = 1;
+    uint32 user_id = 1;
+    string username = 2;
 }
 
 message LoginReq {
@@ -57,6 +58,6 @@ message LoginReq {
 }
 
 message LoginResp {
-    int32 user_id = 1;
+    uint32 user_id = 1;
     string username = 2;
 }

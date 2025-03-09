@@ -41,14 +41,12 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
-
-	resp, err := service.NewLoginService(ctx, c).Run(&req)
+	redirect, err := service.NewLoginService(ctx, c).Run(&req)
 	if err != nil {
-		c.HTML(consts.StatusOK, "sign-in", hertzUtils.H{"error": err})
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
-
-	c.Redirect(consts.StatusFound, []byte(resp))
+	c.Redirect(consts.StatusFound, []byte(redirect))
 }
 
 // Logout .
@@ -62,14 +60,12 @@ func Logout(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := &common.Empty{}
-	resp, err = service.NewLogoutService(ctx, c).Run(&req)
+	_, err = service.NewLogoutService(ctx, c).Run(&req)
 	if err != nil {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
-
-	utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+	c.Redirect(consts.StatusFound, []byte("/"))
 }
 
 // Getpersonal .

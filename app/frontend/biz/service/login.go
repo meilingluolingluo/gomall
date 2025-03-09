@@ -27,6 +27,7 @@ func (h *LoginService) Run(req *auth.LoginReq) (resp string, err error) {
 
 	session := sessions.Default(h.RequestContext)
 	session.Set("user_id", res.UserId)
+	session.Set("username", res.Username)
 	err = session.Save()
 	frontendutils.MustHandleError(err)
 	redirect := "/"

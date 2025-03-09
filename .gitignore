@@ -21,3 +21,8 @@
 */vendor
 */bin
 */log
+*.mod
+*.sum
+*.zip
+*.work
+*.work.sum

@@ -9,19 +9,17 @@ import (
 	"net/http"
 )
 
-type SessionUserIdKey string
-
-const SessionUserId SessionUserIdKey = "user_id"
-
 func GlobalAuth() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		session := sessions.Default(c)
 		userId := session.Get("user_id")
+		userName := session.Get("username")
 		if userId == nil {
 			c.Next(ctx)
 			return
 		}
 		ctx = context.WithValue(ctx, frontendUtils.SessionUserId, userId)
+		ctx = context.WithValue(ctx, frontendUtils.SessionUserName, userName)
 		c.Next(ctx)
 	}
 }
@@ -40,7 +38,8 @@ func Auth() app.HandlerFunc {
 			c.Abort()
 			return
 		}
-		ctx = context.WithValue(ctx, SessionUserId, userId)
+		ctx = context.WithValue(ctx, frontendUtils.SessionUserId, userId)
+		ctx = context.WithValue(ctx, frontendUtils.SessionUserName, session.Get("username"))
 		c.Next(ctx)
 	}
 }

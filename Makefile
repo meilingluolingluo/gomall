@@ -40,7 +40,7 @@ gen-home:
 
 .PHONY: gen-frontend
 gen-frontend:
-	@cd app/frontend && cwgo server --type HTTP --idl ../../idl/frontend/auth_page.proto --service frontend --module github.com/meilingluolingluo/gomall/app/frontend -I ../../idl
+	@cd app/frontend && cwgo server --type HTTP --idl ../../idl/frontend/category_page.proto --service frontend --module github.com/meilingluolingluo/gomall/app/frontend -I ../../idl
 
 .PHONY: gen-rpc
 gen-rpc:
@@ -55,11 +55,12 @@ gen-product:
 	@cd rpc_gen && cwgo client --type RPC --service product --module github.com/meilingluolingluo/gomall/rpc_gen  -I ../idl  --idl ../idl/product.proto
 	@cd app/product && cwgo server --type RPC --service product --module github.com/meilingluolingluo/gomall/app/product --pass "-use github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/product.proto
 
+
 .PHONY: gen-cart
 gen-cart: 
 	@cd rpc_gen && cwgo client --type RPC --service cart --module github.com/meilingluolingluo/gomall/rpc_gen  -I ../idl  --idl ../idl/cart.proto
 	@cd app/cart && cwgo server --type RPC --service cart --module github.com/meilingluolingluo/gomall/app/cart --pass "-use github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/cart.proto
-
+	@cd app/frontend && cwgo server --type HTTP --idl ../../idl/frontend/cart_page.proto --service frontend --module github.com/meilingluolingluo/gomall/app/frontend -I ../../idl
 .PHONY: gen-payment
 gen-payment: 
 	@cd rpc_gen && cwgo client --type RPC --service payment --module github.com/meilingluolingluo/gomall/rpc_gen  -I ../idl  --idl ../idl/payment.proto
@@ -69,6 +70,7 @@ gen-payment:
 gen-checkout: 
 	@cd rpc_gen && cwgo client --type RPC --service checkout --module github.com/meilingluolingluo/gomall/rpc_gen  -I ../idl  --idl ../idl/checkout.proto
 	@cd app/checkout && cwgo server --type RPC --service checkout --module github.com/meilingluolingluo/gomall/app/checkout --pass "-use github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/checkout.proto
+	@cd app/frontend && cwgo server --type HTTP --idl ../../idl/frontend/checkout_page.proto --service frontend --module github.com/meilingluolingluo/gomall/app/frontend -I ../../idl
 
 .PHONY: gen-order
 gen-order: 
