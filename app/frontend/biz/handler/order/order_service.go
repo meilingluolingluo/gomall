@@ -2,6 +2,7 @@ package order
 
 import (
 	"context"
+	"log"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -28,7 +29,7 @@ func OrderList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	// log.Printf("resp order %v", resp)
-	c.HTML(consts.StatusOK, "order", resp)
+	c.HTML(consts.StatusOK, "order", utils.WarpResponse(ctx, c, resp))
 }
 
 // UpdateOrderPage .
@@ -47,8 +48,7 @@ func UpdateOrderPage(ctx context.Context, c *app.RequestContext) {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
-
-	utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+	c.HTML(consts.StatusOK, "updateorderpage", utils.WarpResponse(ctx, c, resp))
 }
 
 // UpdateOrder .
@@ -57,18 +57,20 @@ func UpdateOrder(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req order.UpdateOrderReq
 	err = c.BindAndValidate(&req)
+	// log.Printf("UpdateOrderReq %v", req)
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+	// log.Printf("UpdateOrderReq %s", req.OrderId)
+	_, err = service.NewUpdateOrderService(ctx, c).Run(&req)
 	if err != nil {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
 
-	resp, err := service.NewUpdateOrderService(ctx, c).Run(&req)
-	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
-		return
-	}
-
-	utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+	// 重定向到 /order 页面
+	c.Redirect(consts.StatusFound, []byte("/order"))
 }
 
 // DeleteOrder .
@@ -81,12 +83,14 @@ func DeleteOrder(ctx context.Context, c *app.RequestContext) {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
-
+	log.Printf("DeleteOrderid %s", req.OrderId)
 	resp, err := service.NewDeleteOrderService(ctx, c).Run(&req)
 	if err != nil {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
 
-	utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+
+	c.HTML(consts.StatusOK, "delete-order", utils.WarpResponse(ctx, c, resp))
 }

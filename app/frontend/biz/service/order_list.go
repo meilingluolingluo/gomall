@@ -45,7 +45,7 @@ func (h *OrderListService) Run(req *common.Empty) (resp map[string]any, err erro
 			total float32
 			items []types.OrderItem
 		)
-
+		log.Printf("order: %v", v)
 		for _, v := range v.OrderItems {
 			total += v.Cost
 			i := v.Item
@@ -53,11 +53,13 @@ func (h *OrderListService) Run(req *common.Empty) (resp map[string]any, err erro
 			if err != nil {
 				return nil, err
 			}
+			log.Printf("productResp: %v", productResp)
 			if productResp == nil || productResp.Product == nil {
 				continue
 			}
 			p := productResp.Product
 			items = append(items, types.OrderItem{
+				Id:          int32(i.ProductId),
 				ProductName: p.Name,
 				Quantity:    int32(i.Quantity),
 				Cost:        float64(v.Cost),
@@ -66,10 +68,18 @@ func (h *OrderListService) Run(req *common.Empty) (resp map[string]any, err erro
 		}
 		created := time.Unix(int64(v.CreatedAt), 0)
 		list = append(list, types.Order{
-			OrderId:       v.OrderId,
-			CreateData:    created.Format("2006-01-02 15:04:05"),
-			OrderItems:    items,
-			Cost:          float64(total),
+			OrderId:    v.OrderId,
+			CreateData: created.Format("2006-01-02 15:04:05"),
+			OrderItems: items,
+			Cost:       float64(total),
+			Consignee: types.Consignee{
+				City:          v.Address.City,
+				Country:       v.Address.Country,
+				Email:         v.Email,
+				State:         v.Address.State,
+				StreetAddress: v.Address.StreetAddress,
+				ZipCode:       int32(v.Address.ZipCode),
+			},
 			PaymentStatus: v.Paymentstatus,
 		})
 	}

@@ -49,7 +49,9 @@ func (s *ListOrderService) Run(req *order.ListOrderReq) (resp *order.ListOrderRe
 				Country:       v.Consignee.Country,
 				ZipCode:       v.Consignee.ZipCode,
 			},
-			OrderItems: items,
+			OrderItems:    items,
+			CreatedAt:     int32(v.CreatedAt.Unix()),
+			Paymentstatus: v.PaymentStatus,
 		})
 	}
 	resp = &order.ListOrderResp{

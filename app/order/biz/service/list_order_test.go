@@ -15,7 +15,7 @@ func TestListOrder_Run(t *testing.T) {
 	// init req and assert value
 	mysql.InitTest()
 	req := &order.ListOrderReq{
-		UserId: 123,
+		UserId: 13,
 	}
 	resp, err := s.Run(req)
 

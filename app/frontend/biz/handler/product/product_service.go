@@ -28,7 +28,7 @@ func GetProduct(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.HTML(consts.StatusOK, "product", resp)
+	c.HTML(consts.StatusOK, "product", utils.WarpResponse(ctx, c, resp))
 }
 
 // SearchProducs .
@@ -48,5 +48,5 @@ func SearchProducs(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.HTML(consts.StatusOK, "search", resp)
+	c.HTML(consts.StatusOK, "search", utils.WarpResponse(ctx, c, resp))
 }

@@ -1,6 +1,7 @@
 package types
 
 type OrderItem struct {
+	Id          int32
 	ProductName string
 	Picture     string
 	Cost        float64
@@ -12,6 +13,7 @@ type Order struct {
 	CreateData    string
 	OrderItems    []OrderItem
 	Cost          float64
+	Consignee     Consignee
 	PaymentStatus string
 }
 
