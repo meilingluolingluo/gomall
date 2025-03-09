@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/meilingluolingluo/gomall/app/cart/biz/model"
+	"github.com/meilingluolingluo/gomall/app/payment/biz/model"
 	"gorm.io/gorm/logger"
 	"log"
 	"os"
@@ -45,7 +45,7 @@ func DefaultConfig() *Config {
 		PrepareStmt:     true,                   // 预编译语句
 		SkipTransaction: true,                   // 跳过默认事务
 		AutoMigrateModels: []interface{}{
-			&model.Cart{},
+			&model.PaymentLog{},
 			// 添加其他需要自动迁移的模型
 		},
 	}

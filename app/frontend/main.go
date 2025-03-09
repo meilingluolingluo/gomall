@@ -87,7 +87,7 @@ Disallow: /`))
 }
 
 func registerMiddleware(h *server.Hertz) {
-	// log
+
 	store, _ := redis.NewStore(10, "tcp", conf.GetConf().Redis.Address, "", []byte(os.Getenv("SESSION_SECRET")))
 	h.Use(sessions.New("shop", store))
 	logger := hertzlogrus.NewLogger()

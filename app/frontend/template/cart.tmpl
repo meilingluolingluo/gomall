@@ -1,237 +1,46 @@
-{{define "cart"}}
-{{template "header" .}}
-
-<div class="cart-container">
-    <h2>我的购物车</h2>
-    <div class="loading" id="loading">加载中...</div>
-    <div id="cart-items" class="row">
-        {{if .Cart.Items}}
-        {{range .Cart.Items}}
-        <div class="cart-item col-md-12" data-product-id="{{.ProductId}}">
-            <div class="row align-items-center">
-                <div class="col-md-3">
-                    <img src="/static/images/product_{{.ProductId}}.jpg" alt="商品图片" class="img-thumbnail" style="max-width: 100px;">
-                </div>
-                <div class="col-md-3">
-                    <h5>{{.ProductName}}</h5>
-                    <p>价格: ¥{{.Price}}</p>
-                </div>
-                <div class="col-md-3">
-                    <div class="input-group w-50">
-                        <button class="btn btn-outline-secondary decrease-quantity" data-product-id="{{.ProductId}}">-</button>
-                        <input type="number" class="form-control text-center quantity-input" value="{{.Quantity}}" min="1" data-product-id="{{.ProductId}}">
-                        <button class="btn btn-outline-secondary increase-quantity" data-product-id="{{.ProductId}}">+</button>
+{{ define "cart" }}
+{{ template "header" . }}
+<div class="container">
+    <div class="row mt-4">
+        <ul class="list-group w-100">
+            {{ range $.items }}
+            <li class="list-group-item">
+                <div class="card border-0">
+                    <div class="card-body row">
+                        <div class="col-4">
+                            <img src="{{ .Picture }}" style="max-width: 100px; max-height: 50px;" alt="">
+                        </div>
+                        <div class="col-8">
+                            <div class="mt-1">{{ .Name }}</div>
+                            <div class="mt-1">单价: ¥{{ .Price }}</div>
+                            <div class="mt-1">数量: {{ .Qty }}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <p>小计: ¥{{.Subtotal}}</p>
-                </div>
-                <div class="col-md-1">
-                    <button class="btn btn-danger remove-item" data-product-id="{{.ProductId}}"><i class="fas fa-trash-alt"></i></button>
+            </li>
+            {{ end}}
+        </ul>
+        {{ if $.items }}
+        <div class="mt-3 mb-5 text-center">
+            <div class="d-flex justify-content-between align-items-center">
+                <form action="/cart/empty" method="post" onsubmit="return confirm('确定要清空购物车吗？')">
+                    <button type="submit" class="btn btn-lg btn-danger">清空购物车</button>
+                </form>
+                <div>
+                    <div class="m-3 text-danger">总计: ¥{{ .total }}</div>
+                    <a href="/checkout" class="btn btn-lg btn-success">结算</a>
                 </div>
             </div>
         </div>
-        {{end}}
         {{else}}
-        <p class="text-center">您的购物车为空，请<a href="/products">去购物</a>！</p>
-        {{end}}
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <button class="btn btn-warning {{if not .Cart.Items}}btn-disabled{{end}}" id="empty-cart" {{if not .Cart.Items}}disabled{{end}}>清空购物车</button>
-            <a href="/checkout" class="btn btn-success {{if not .Cart.Items}}btn-disabled{{end}}" {{if not .Cart.Items}}disabled{{end}}>结算</a>
+        <div class="text-center">
+            <img src="/static/image/cart.png" alt="Empty Cart" style="max-width: 200px; display: block; margin: auto;">
+            <h1 class="text-center text-danger mt-3">购物车空空如也</h1>
+            <div class="text-center"><a href="/">返回商品页面</a></div>
         </div>
-        <div class="col-md-6 text-end total-price">
-            总价: ¥<span id="total-amount">0.00</span>
-        </div>
+        {{ end }}
     </div>
-
-    <div id="error-message" class="error-message mt-3"></div>
 </div>
+{{ template "footer" . }}
 
-<script>
-    $(document).ready(function() {
-        // 显示加载中
-        function showLoading() {
-            $('#loading').show();
-            $('#cart-items, #empty-cart, .btn-success').hide();
-        }
-
-        // 隐藏加载中
-        function hideLoading() {
-            $('#loading').hide();
-            $('#cart-items, #empty-cart, .btn-success').show();
-        }
-
-        // 加载购物车数据
-        function loadCart() {
-            showLoading();
-            $.ajax({
-                url: '/cart/GetCart',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ user_id: {{.Cart.UserId}} }), // 假设用户已登录
-            success: function(data) {
-                hideLoading();
-                if (data.cart && data.cart.items) {
-                    let html = '';
-                    let total = 0;
-                    let promises = [];
-                    data.cart.items.forEach(item => {
-                        promises.push(new Promise((resolve) => {
-                            $.ajax({
-                                url: '/product/GetProduct',
-                                method: 'POST',
-                                contentType: 'application/json',
-                                data: JSON.stringify({ id: item.product_id }),
-                                success: function(product) {
-                                    let price = product.product.price || 0;
-                                    let subtotal = price * item.quantity;
-                                    total += subtotal;
-                                    html += `
-                                                <div class="cart-item col-md-12" data-product-id="${item.product_id}">
-                                                    <div class="row align-items-center">
-                                                        <div class="col-md-3">
-                                                            <img src="/static/images/product_${item.product_id}.jpg" alt="商品图片" class="img-thumbnail" style="max-width: 100px;">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <h5>${product.product.name}</h5>
-                                                            <p>价格: ¥${price.toFixed(2)}</p>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <div class="input-group w-50">
-                                                                <button class="btn btn-outline-secondary decrease-quantity" data-product-id="${item.product_id}">-</button>
-                                                                <input type="number" class="form-control text-center quantity-input" value="${item.quantity}" min="1" data-product-id="${item.product_id}">
-                                                                <button class="btn btn-outline-secondary increase-quantity" data-product-id="${item.product_id}">+</button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <p>小计: ¥${subtotal.toFixed(2)}</p>
-                                                        </div>
-                                                        <div class="col-md-1">
-                                                            <button class="btn btn-danger remove-item" data-product-id="${item.product_id}"><i class="fas fa-trash-alt"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            `;
-                                    resolve();
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error('Failed to get product:', error);
-                                    resolve(); // 即使失败也继续
-                                }
-                            });
-                        }));
-                    });
-
-                    Promise.all(promises).then(() => {
-                        $('#cart-items').html(html);
-                        $('#total-amount').text(total.toFixed(2));
-                        updateButtonStates();
-                    });
-                } else {
-                    $('#cart-items').html('<p class="text-center">您的购物车为空，请<a href="/products">去购物</a>！</p>');
-                    $('#total-amount').text('0.00');
-                    updateButtonStates();
-                }
-            },
-            error: function(xhr, status, error) {
-                hideLoading();
-                $('#error-message').text('加载购物车失败，请重试').show();
-                console.error('Failed to load cart:', error);
-            }
-        });
-        }
-
-        // 初始加载购物车
-        loadCart();
-
-        // 修改数量
-        $(document).on('click', '.increase-quantity, .decrease-quantity', function() {
-            const $btn = $(this);
-            const productId = $btn.data('product-id');
-            const $input = $(`.quantity-input[data-product-id="${productId}"]`);
-            let quantity = parseInt($input.val());
-            if ($btn.hasClass('increase-quantity')) {
-                quantity++;
-            } else if (quantity > 1) {
-                quantity--;
-            }
-            $input.val(quantity);
-
-            // 更新购物车
-            updateCartItem(productId, quantity);
-        });
-
-        // 删除商品
-        $(document).on('click', '.remove-item', function() {
-            const productId = $(this).data('product-id');
-            updateCartItem(productId, 0); // 设置数量为 0 相当于删除
-        });
-
-        // 清空购物车
-        $('#empty-cart').click(function() {
-            if ($(this).hasClass('btn-disabled')) return;
-            showLoading();
-            $.ajax({
-                url: '/cart/EmptyCart',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ user_id: {{.Cart.UserId}} }),
-            success: function(data) {
-                hideLoading();
-                if (data.success) {
-                    loadCart();
-                    $('#error-message').text('购物车已清空').show().fadeOut(3000);
-                } else {
-                    $('#error-message').text(data.message || '清空购物车失败').show();
-                }
-            },
-            error: function(xhr, status, error) {
-                hideLoading();
-                $('#error-message').text('清空购物车失败，请重试').show();
-                console.error('Failed to empty cart:', error);
-            }
-        });
-        });
-
-        // 更新购物车项
-        function updateCartItem(productId, quantity) {
-            showLoading();
-            $.ajax({
-                url: '/cart/AddItem',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    user_id: {{.Cart.UserId}},
-            item: { product_id: productId, quantity: quantity }
-        }),
-            success: function(data) {
-                hideLoading();
-                if (data.success) {
-                    loadCart();
-                    $('#error-message').text('购物车更新成功').show().fadeOut(3000);
-                } else {
-                    $('#error-message').text(data.message || '更新购物车失败').show();
-                }
-            },
-            error: function(xhr, status, error) {
-                hideLoading();
-                $('#error-message').text('更新购物车失败，请重试').show();
-                console.error('Failed to update cart:', error);
-            }
-        });
-        }
-
-        // 更新按钮状态
-        function updateButtonStates() {
-            if (!$('#cart-items .cart-item').length) {
-                $('#empty-cart, .btn-success').addClass('btn-disabled').prop('disabled', true);
-            } else {
-                $('#empty-cart, .btn-success').removeClass('btn-disabled').prop('disabled', false);
-            }
-        }
-    });
-</script>
-{{end}}
+{{ end }}

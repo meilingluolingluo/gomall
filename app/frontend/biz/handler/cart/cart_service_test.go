@@ -2,6 +2,7 @@ package cart
 
 import (
 	"bytes"
+	"github.com/meilingluolingluo/gomall/app/cart/infra/rpc"
 	"testing"
 
 	"github.com/cloudwego/hertz/pkg/app/server"
@@ -25,12 +26,28 @@ func TestAddCartItem(t *testing.T) {
 }
 
 func TestGetCart(t *testing.T) {
+	rpc.Init()
 	h := server.Default()
 	h.GET("/cart", GetCart)
 	path := "/cart"                                           // todo: you can customize query
 	body := &ut.Body{Body: bytes.NewBufferString(""), Len: 1} // todo: you can customize body
 	header := ut.Header{}                                     // todo: you can customize header
 	w := ut.PerformRequest(h.Engine, "GET", path, body, header)
+	resp := w.Result()
+	t.Log(string(resp.Body()))
+
+	// todo edit your unit test.
+	// assert.DeepEqual(t, 200, resp.StatusCode())
+	// assert.DeepEqual(t, "null", string(resp.Body()))
+}
+
+func TestEmptyCart(t *testing.T) {
+	h := server.Default()
+	h.POST("/cart/empty", EmptyCart)
+	path := "/cart/empty"                                     // todo: you can customize query
+	body := &ut.Body{Body: bytes.NewBufferString(""), Len: 1} // todo: you can customize body
+	header := ut.Header{}                                     // todo: you can customize header
+	w := ut.PerformRequest(h.Engine, "POST", path, body, header)
 	resp := w.Result()
 	t.Log(string(resp.Body()))
 

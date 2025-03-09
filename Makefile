@@ -70,7 +70,7 @@ gen-payment:
 gen-checkout: 
 	@cd rpc_gen && cwgo client --type RPC --service checkout --module github.com/meilingluolingluo/gomall/rpc_gen  -I ../idl  --idl ../idl/checkout.proto
 	@cd app/checkout && cwgo server --type RPC --service checkout --module github.com/meilingluolingluo/gomall/app/checkout --pass "-use github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/checkout.proto
-	@cd app/frontend && cwgo server --type HTTP --idl ../../idl/checkout.proto --service frontend --module github.com/meilingluolingluo/gomall/app/frontend -I ../../idl
+	@cd app/frontend && cwgo server --type HTTP --idl ../../idl/frontend/checkout_page.proto --service frontend --module github.com/meilingluolingluo/gomall/app/frontend -I ../../idl
 
 .PHONY: gen-order
 gen-order: 

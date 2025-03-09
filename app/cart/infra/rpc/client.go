@@ -42,6 +42,7 @@ func initProductClient() {
 	ProductClient, err = productcatalogservice.NewClient("product", opts...)
 	cartutils.MustHandleError(err)
 }
+
 func initCartClient() {
 	var opts []client.Option
 	r, err := consul.NewConsulResolver(conf.GetConf().Registry.RegistryAddress[0])

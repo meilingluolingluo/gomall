@@ -10,15 +10,6 @@ service CheckoutService {
   rpc Checkout(CheckoutReq) returns (CheckoutResp) {}
 }
 
-message CheckoutReq {
-  uint32 user_id = 1;
-  string firstname = 2;
-  string lastname = 3;
-  string email =4;
-  Address address = 5;
-  payment.CreditCardInfo credit_card = 6;
-}
-
 message Address {
   string street_address = 1;
   string city = 2;
@@ -27,7 +18,30 @@ message Address {
   string zip_code = 5;
 }
 
+enum PaymentType {
+  CARD = 0;
+  ALIPAY = 1;
+}
+
+
+message PaymentInfo {
+  PaymentType payment_type = 1;
+  payment.CreditCardInfo credit_card = 2;
+  string alipay_auth_code = 3;
+}
+
+message CheckoutReq {
+  uint32 user_id = 1;
+  string firstname = 2;
+  string lastname = 3;
+  string email = 4;
+  Address address = 5;
+  PaymentInfo payment = 6;
+  PaymentType payment_type = 7;
+}
+
 message CheckoutResp {
   string order_id = 1;
   string transaction_id = 2;
+  string payment_url = 3;
 }

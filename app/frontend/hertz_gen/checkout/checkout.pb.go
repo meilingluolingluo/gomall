@@ -7,8 +7,7 @@
 package checkout
 
 import (
-	context "context"
-	payment "github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/payment"
+	payment "github.com/meilingluolingluo/gomall/app/frontend/hertz_gen/payment"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -73,11 +72,11 @@ type Address struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StreetAddress string `protobuf:"bytes,1,opt,name=street_address,json=streetAddress,proto3" json:"street_address,omitempty"`
-	City          string `protobuf:"bytes,2,opt,name=city,proto3" json:"city,omitempty"`
-	State         string `protobuf:"bytes,3,opt,name=state,proto3" json:"state,omitempty"`
-	Country       string `protobuf:"bytes,4,opt,name=country,proto3" json:"country,omitempty"`
-	ZipCode       string `protobuf:"bytes,5,opt,name=zip_code,json=zipCode,proto3" json:"zip_code,omitempty"`
+	StreetAddress string `protobuf:"bytes,1,opt,name=street_address,json=streetAddress,proto3" json:"street_address,omitempty" form:"street_address" query:"street_address"`
+	City          string `protobuf:"bytes,2,opt,name=city,proto3" json:"city,omitempty" form:"city" query:"city"`
+	State         string `protobuf:"bytes,3,opt,name=state,proto3" json:"state,omitempty" form:"state" query:"state"`
+	Country       string `protobuf:"bytes,4,opt,name=country,proto3" json:"country,omitempty" form:"country" query:"country"`
+	ZipCode       string `protobuf:"bytes,5,opt,name=zip_code,json=zipCode,proto3" json:"zip_code,omitempty" form:"zip_code" query:"zip_code"`
 }
 
 func (x *Address) Reset() {
@@ -152,9 +151,9 @@ type PaymentInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PaymentType    PaymentType             `protobuf:"varint,1,opt,name=payment_type,json=paymentType,proto3,enum=checkout.PaymentType" json:"payment_type,omitempty"`
-	CreditCard     *payment.CreditCardInfo `protobuf:"bytes,2,opt,name=credit_card,json=creditCard,proto3" json:"credit_card,omitempty"`
-	AlipayAuthCode string                  `protobuf:"bytes,3,opt,name=alipay_auth_code,json=alipayAuthCode,proto3" json:"alipay_auth_code,omitempty"`
+	PaymentType    PaymentType             `protobuf:"varint,1,opt,name=payment_type,json=paymentType,proto3,enum=checkout.PaymentType" json:"payment_type,omitempty" form:"payment_type" query:"payment_type"`
+	CreditCard     *payment.CreditCardInfo `protobuf:"bytes,2,opt,name=credit_card,json=creditCard,proto3" json:"credit_card,omitempty" form:"credit_card" query:"credit_card"`
+	AlipayAuthCode string                  `protobuf:"bytes,3,opt,name=alipay_auth_code,json=alipayAuthCode,proto3" json:"alipay_auth_code,omitempty" form:"alipay_auth_code" query:"alipay_auth_code"`
 }
 
 func (x *PaymentInfo) Reset() {
@@ -215,13 +214,13 @@ type CheckoutReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId      uint32       `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Firstname   string       `protobuf:"bytes,2,opt,name=firstname,proto3" json:"firstname,omitempty"`
-	Lastname    string       `protobuf:"bytes,3,opt,name=lastname,proto3" json:"lastname,omitempty"`
-	Email       string       `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
-	Address     *Address     `protobuf:"bytes,5,opt,name=address,proto3" json:"address,omitempty"`
-	Payment     *PaymentInfo `protobuf:"bytes,6,opt,name=payment,proto3" json:"payment,omitempty"`
-	PaymentType PaymentType  `protobuf:"varint,7,opt,name=payment_type,json=paymentType,proto3,enum=checkout.PaymentType" json:"payment_type,omitempty"`
+	UserId      uint32       `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" form:"user_id" query:"user_id"`
+	Firstname   string       `protobuf:"bytes,2,opt,name=firstname,proto3" json:"firstname,omitempty" form:"firstname" query:"firstname"`
+	Lastname    string       `protobuf:"bytes,3,opt,name=lastname,proto3" json:"lastname,omitempty" form:"lastname" query:"lastname"`
+	Email       string       `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty" form:"email" query:"email"`
+	Address     *Address     `protobuf:"bytes,5,opt,name=address,proto3" json:"address,omitempty" form:"address" query:"address"`
+	Payment     *PaymentInfo `protobuf:"bytes,6,opt,name=payment,proto3" json:"payment,omitempty" form:"payment" query:"payment"`
+	PaymentType PaymentType  `protobuf:"varint,7,opt,name=payment_type,json=paymentType,proto3,enum=checkout.PaymentType" json:"payment_type,omitempty" form:"payment_type" query:"payment_type"`
 }
 
 func (x *CheckoutReq) Reset() {
@@ -310,9 +309,9 @@ type CheckoutResp struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	OrderId       string `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
-	TransactionId string `protobuf:"bytes,2,opt,name=transaction_id,json=transactionId,proto3" json:"transaction_id,omitempty"`
-	PaymentUrl    string `protobuf:"bytes,3,opt,name=payment_url,json=paymentUrl,proto3" json:"payment_url,omitempty"`
+	OrderId       string `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty" form:"order_id" query:"order_id"`
+	TransactionId string `protobuf:"bytes,2,opt,name=transaction_id,json=transactionId,proto3" json:"transaction_id,omitempty" form:"transaction_id" query:"transaction_id"`
+	PaymentUrl    string `protobuf:"bytes,3,opt,name=payment_url,json=paymentUrl,proto3" json:"payment_url,omitempty" form:"payment_url" query:"payment_url"`
 }
 
 func (x *CheckoutResp) Reset() {
@@ -425,11 +424,12 @@ var file_checkout_proto_rawDesc = []byte{
 	0x74, 0x12, 0x15, 0x2e, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x6f, 0x75, 0x74, 0x2e, 0x43, 0x68, 0x65,
 	0x63, 0x6b, 0x6f, 0x75, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x63, 0x68, 0x65, 0x63, 0x6b,
 	0x6f, 0x75, 0x74, 0x2e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x6f, 0x75, 0x74, 0x52, 0x65, 0x73, 0x70,
-	0x22, 0x00, 0x42, 0x40, 0x5a, 0x3e, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
+	0x22, 0x00, 0x42, 0x45, 0x5a, 0x43, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
 	0x2f, 0x6d, 0x65, 0x69, 0x6c, 0x69, 0x6e, 0x67, 0x6c, 0x75, 0x6f, 0x6c, 0x69, 0x6e, 0x67, 0x6c,
-	0x75, 0x6f, 0x2f, 0x67, 0x6f, 0x6d, 0x61, 0x6c, 0x6c, 0x2f, 0x72, 0x70, 0x63, 0x5f, 0x67, 0x65,
-	0x6e, 0x2f, 0x6b, 0x69, 0x74, 0x65, 0x78, 0x5f, 0x67, 0x65, 0x6e, 0x2f, 0x63, 0x68, 0x65, 0x63,
-	0x6b, 0x6f, 0x75, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x75, 0x6f, 0x2f, 0x67, 0x6f, 0x6d, 0x61, 0x6c, 0x6c, 0x2f, 0x61, 0x70, 0x70, 0x2f, 0x66, 0x72,
+	0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x64, 0x2f, 0x68, 0x65, 0x72, 0x74, 0x7a, 0x5f, 0x67, 0x65, 0x6e,
+	0x2f, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x6f, 0x75, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -543,12 +543,4 @@ func file_checkout_proto_init() {
 	file_checkout_proto_rawDesc = nil
 	file_checkout_proto_goTypes = nil
 	file_checkout_proto_depIdxs = nil
-}
-
-var _ context.Context
-
-// Code generated by Kitex v0.9.1. DO NOT EDIT.
-
-type CheckoutService interface {
-	Checkout(ctx context.Context, req *CheckoutReq) (res *CheckoutResp, err error)
 }

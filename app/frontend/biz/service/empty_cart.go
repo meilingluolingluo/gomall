@@ -23,7 +23,7 @@ func NewEmptyCartService(Context context.Context, RequestContext *app.RequestCon
 func (h *EmptyCartService) Run(req *common.Empty) (resp map[string]any, err error) {
 	// 调用RPC服务
 	if _, err = rpc.CartClient.EmptyCart(h.Context, &rpccart.EmptyCartReq{
-		UserId: uint32(h.Context.Value(frontendutils.SessionUserId).(float64)),
+		UserId: frontendutils.GetUserIdFromCtx(h.Context),
 	}); err != nil {
 		return nil, fmt.Errorf("清空购物车失败: %w", err)
 	}
