@@ -4,10 +4,12 @@ use (
 	app/frontend
 	rpc_gen
 	app/user
+
 	app/cart
-	.
+
 	app/payment
 	app/checkout
 	app/product
 	app/order
+
 )
