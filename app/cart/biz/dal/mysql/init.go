@@ -3,14 +3,15 @@ package mysql
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
+	"time"
+
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/meilingluolingluo/gomall/app/cart/biz/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"log"
-	"os"
-	"time"
 )
 
 // DB is the global GORM database instance.

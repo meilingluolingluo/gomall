@@ -3,12 +3,14 @@ package service
 import (
 	"context"
 	"fmt"
+	"log"
+	"time"
+
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/hertz-contrib/sessions"
 	"github.com/meilingluolingluo/gomall/app/frontend/hertz_gen/frontend/common"
 	"github.com/meilingluolingluo/gomall/app/frontend/infra/rpc"
 	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/user"
-	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	auth "github.com/meilingluolingluo/gomall/app/frontend/hertz_gen/frontend/auth"
@@ -44,9 +46,12 @@ func (h *RegisterService) Run(req *auth.RegisterReq) (resp *common.Empty, err er
 		ConfirmPassword: req.ConfirmPassword,
 	})
 	if err != nil {
+		log.Printf("Error Register: %v", err)
 		return nil, err
 	}
 	println("userResp:", userResp)
+
+	log.Printf("Error")
 
 	// 设置session
 	session := sessions.Default(h.RequestContext)
@@ -54,6 +59,7 @@ func (h *RegisterService) Run(req *auth.RegisterReq) (resp *common.Empty, err er
 	session.Set("username", userResp.Username)
 	err = session.Save()
 	if err != nil {
+		log.Printf("Error saving session: %v", err)
 		return nil, err
 	}
 

@@ -2,6 +2,7 @@ package home
 
 import (
 	"context"
+	"log"
 
 	"github.com/meilingluolingluo/gomall/app/frontend/biz/utils"
 
@@ -27,5 +28,6 @@ func Home(ctx context.Context, c *app.RequestContext) {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
+	log.Printf("resp: %v", resp)
 	c.HTML(consts.StatusOK, "home", utils.WarpResponse(ctx, c, resp))
 }

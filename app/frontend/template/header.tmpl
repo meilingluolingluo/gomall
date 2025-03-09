@@ -66,6 +66,9 @@
             {{ template "cart-num" . }}
           </div>
         </li>
+        <li class="nav-item">
+          <a href="/order" class="nav-link btn btn-success btn-sm">我的订单</a>
+        </li>
         <li class="nav-item dropdown">
           {{if and (ne .user_id nil) (gt .user_id 0)}}
           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{.username}}">

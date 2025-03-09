@@ -56,6 +56,7 @@ message Order {
   Address address = 5;
   string email = 6;
   int32 created_at = 7;
+  string paymentstatus = 8;
 }
 
 message ListOrderResp {

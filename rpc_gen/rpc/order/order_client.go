@@ -4,9 +4,9 @@ import (
 	"context"
 	order "github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/order"
 
+	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/order/orderservice"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
-	"github.com/meilingluolingluo/gomall/rpc_gen/kitex_gen/order/orderservice"
 )
 
 type RPCClient interface {

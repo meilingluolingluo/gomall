@@ -1,0 +1,180 @@
+{{ define "updateorderpage" }}
+{{ template "header" . }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Order</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .update-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .update-container h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus {
+            border-color: #1890ff;
+            outline: none;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: button;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        .btn-primary {
+            background-color: #1890ff;
+            color: #fff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #40a9ff;
+        }
+        .error-message {
+            color: #ff4d4f;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="update-container">
+        <h1>Update Order</h1>
+        <form id="updateOrderForm" action="/order/update/{{ .OrderId }}" method="POST" onsubmit="return validateForm()">
+            <input type="hidden" name="orderId" value="{{ .OrderId }}">
+            <input type="hidden" name="userId" value="{{ .UserId }}">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="{{ .Email }}" required>
+                <span class="error-message" id="emailError"></span>
+            </div>
+            <div class="form-group">
+                <label for="street">Street Address</label>
+                <input type="text" id="street" name="street_address" value="{{ .Address.StreetAddress }}" required>
+                <span class="error-message" id="streetError"></span>
+            </div>
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" id="city" name="city" value="{{ .Address.City }}" required>
+                <span class="error-message" id="cityError"></span>
+            </div>
+            <div class="form-group">
+                <label for="state">State</label>
+                <input type="text" id="state" name="state" value="{{ .Address.State }}" required>
+                <span class="error-message" id="stateError"></span>
+            </div>
+            <div class="form-group">
+                <label for="country">Country</label>
+                <input type="text" id="country" name="country" value="{{ .Address.Country }}" required>
+                <span class="error-message" id="countryError"></span>
+            </div>
+            <div class="form-group">
+                <label for="zip">Zip Code</label>
+                <input type="text" id="zip_code" name="zip_code" value="{{ .Address.ZipCode }}" required>
+                <span class="error-message" id="zipError"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Order</button>
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            let isValid = true;
+
+            // 检查所有字段是否为空
+            const email = document.getElementById('email').value.trim();
+            const street = document.getElementById('street').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const state = document.getElementById('state').value.trim();
+            const country = document.getElementById('country').value.trim();
+            const zip = document.getElementById('zip_code').value.trim();
+
+            if (email === '') {
+                document.getElementById('emailError').textContent = 'Email is required';
+                isValid = false;
+            } else {
+                document.getElementById('emailError').textContent = '';
+            }
+
+            if (street === '') {
+                document.getElementById('streetError').textContent = 'Street Address is required';
+                isValid = false;
+            } else {
+                document.getElementById('streetError').textContent = '';
+            }
+
+            if (city === '') {
+                document.getElementById('cityError').textContent = 'City is required';
+                isValid = false;
+            } else {
+                document.getElementById('cityError').textContent = '';
+            }
+
+            if (state === '') {
+                document.getElementById('stateError').textContent = 'State is required';
+                isValid = false;
+            } else {
+                document.getElementById('stateError').textContent = '';
+            }
+
+            if (country === '') {
+                document.getElementById('countryError').textContent = 'Country is required';
+                isValid = false;
+            } else {
+                document.getElementById('countryError').textContent = '';
+            }
+
+            if (zip === '') {
+                document.getElementById('zipError').textContent = 'Zip Code is required';
+                isValid = false;
+            } else if (!/^\d+$/.test(zip)) {
+                document.getElementById('zipError').textContent = 'Zip Code must be a number';
+                isValid = false;
+            } else {
+                document.getElementById('zipError').textContent = '';
+            }
+
+            if (!isValid) {
+                alert('Please fill in all required fields.');
+            }
+
+            return isValid;
+        }
+    </script>
+</body>
+</html>
+{{ template "footer" . }}
+{{ end }}

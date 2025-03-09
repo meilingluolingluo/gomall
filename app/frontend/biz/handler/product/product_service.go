@@ -2,6 +2,7 @@ package product
 
 import (
 	"context"
+
 	hertzUtils "github.com/cloudwego/hertz/pkg/common/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -49,5 +50,5 @@ func SearchProducs(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.HTML(consts.StatusOK, "product", utils.WarpResponse(ctx, c, resp))
+	c.HTML(consts.StatusOK, "search", utils.WarpResponse(ctx, c, resp))
 }

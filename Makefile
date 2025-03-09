@@ -40,7 +40,7 @@ gen-home:
 
 .PHONY: gen-frontend
 gen-frontend:
-	@cd app/frontend && cwgo server --type HTTP --idl ../../idl/frontend/category_page.proto --service frontend --module github.com/meilingluolingluo/gomall/app/frontend -I ../../idl
+	@cd app/frontend && cwgo server --type HTTP --idl ../../idl/frontend/order_page.proto --service frontend --module github.com/meilingluolingluo/gomall/app/frontend -I ../../idl
 
 .PHONY: gen-rpc
 gen-rpc:

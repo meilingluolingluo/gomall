@@ -1,7 +1,7 @@
 kitex:
   service: "order"
-  address: "192.168.31.106:8896"
-  log_level: debug
+  address: ":8886"
+  log_level: info
   log_file_name: "log/kitex.log"
   log_max_size: 10
   log_max_age: 3
@@ -9,15 +9,15 @@ kitex:
 
 registry:
   registry_address:
-    - 192.168.31.106:2379
+    - 172.30.16.1:8500
   username: ""
   password: ""
 
 mysql:
-  dsn: "root:root@tcp(192.168.31.106:3306)/order?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn: "%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local"
 
 redis:
-  address: "192.168.31.106:6379"
+  address: "172.30.16.1:6379"
   username: ""
   password: ""
   db: 0

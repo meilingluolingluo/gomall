@@ -11,6 +11,7 @@ import (
 
 	"github.com/hertz-contrib/sessions"
 	"github.com/hertz-contrib/sessions/redis"
+	"github.com/meilingluolingluo/gomall/app/frontend/infra/rpc"
 	"github.com/meilingluolingluo/gomall/app/frontend/middleware"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -27,7 +28,6 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/meilingluolingluo/gomall/app/frontend/biz/router"
 	"github.com/meilingluolingluo/gomall/app/frontend/conf"
-	"github.com/meilingluolingluo/gomall/app/frontend/infra/rpc"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -46,6 +46,7 @@ func main() {
 		},
 	)))
 	registerMiddleware(h)
+
 	// add a ping route to test
 	h.GET("/ping", func(c context.Context, ctx *app.RequestContext) {
 		ctx.JSON(consts.StatusOK, utils.H{"ping": "pong"})

@@ -1,0 +1,167 @@
+{{ define "order" }}
+{{ template "header" . }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .order-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .order-card {
+            background-color: #fff;
+            border: none;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        .order-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #fafafa;
+            border-radius: 12px 12px 0 0;
+        }
+        .order-header h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+        .order-details {
+            padding: 20px;
+        }
+        .order-details p {
+            margin: 8px 0;
+            color: #555;
+            font-size: 14px;
+        }
+        .order-details p i {
+            margin-right: 10px;
+            color: #1890ff;
+        }
+        .order-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.3s ease;
+        }
+        .order-item:hover {
+            background-color: #f9f9f9;
+        }
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        .order-item img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+        .order-item-info {
+            flex: 1;
+        }
+        .order-item-info h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+        }
+        .order-item-info p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background-color: #1890ff;
+            color: #fff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #40a9ff;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background-color: #ff4d4f;
+            color: #fff;
+            border: none;
+        }
+        .btn-danger:hover {
+            background-color: #ff7875;
+            transform: translateY(-2px);
+        }
+        .order-actions {
+            padding: 20px;
+            text-align: right;
+            border-top: 1px solid #e0e0e0;
+        }
+        .order-actions .btn {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="order-container">
+        <h1 style="font-size: 28px; color: #333; margin-bottom: 30px; font-weight: 600;">{{ .title }}</h1>
+        {{ range .orders }}
+        <div class="order-card">
+            <div class="order-header">
+                <h2><i class="fas fa-receipt"></i> Order ID: {{ .OrderId }}</h2>
+            </div>
+            <div class="order-details">
+                <p><i class="fas fa-calendar-alt"></i> Date: {{ .CreateData }}</p>
+                <p><i class="fas fa-dollar-sign"></i> Total Cost: ${{ .Cost }}</p>
+                <p><i class="fas fa-check-circle"></i> Payment Status: {{ .PaymentStatus }}</p>
+                <p><i class="fas fa-user"></i> Consignee: {{ .Consignee.Email }}</p>
+                <p><i class="fas fa-map-marker-alt"></i> Address: {{ .Consignee.StreetAddress }}, {{ .Consignee.City }}, {{ .Consignee.State }}, {{ .Consignee.Country }}, {{ .Consignee.ZipCode }}</p>
+            </div>
+            <h3 style="padding: 0 20px; font-size: 18px; color: #333; margin-top: 20px;">Items:</h3>
+            {{ range .OrderItems }}
+            <a href="/product?id={{ .Id }}">
+                <div class="order-item">
+                    <img src="{{ .Picture }}" alt="{{ .ProductName }}">
+                    <div class="order-item-info">
+                        <h3>{{ .ProductName }}</h3>
+                        <p>Quantity: {{ .Quantity }}</p>
+                        <p>Cost: ${{ .Cost }}</p>
+                    </div>
+                </div>
+            </a>
+            {{ end }}
+            <div class="order-actions">
+                <a href="/order/update/{{ .OrderId }}" class="btn btn-primary">Update</a>
+                <form action="/order/delete/{{ .OrderId }}" method="POST" style="display: inline;">
+                    <input type="hidden" name="orderId" value="{{ .OrderId }}"> 
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+        {{ end }}
+    </div>
+</body>
+</html>
+{{ template "footer" . }}
+{{ end }}

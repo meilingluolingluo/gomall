@@ -2,6 +2,8 @@ package utils
 
 import (
 	"context"
+	"log"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/meilingluolingluo/gomall/app/frontend/infra/rpc"
 	frontendutils "github.com/meilingluolingluo/gomall/app/frontend/utils"
@@ -26,6 +28,7 @@ func WarpResponse(ctx context.Context, c *app.RequestContext, content map[string
 	content["user_id"] = userId
 	content["username"] = username
 	if userId > 0 {
+
 		cartResp, err := rpc.CartClient.GetCart(ctx, &cart.GetCartReq{
 			UserId: frontendutils.GetUserIdFromCtx(ctx),
 		})
@@ -35,6 +38,6 @@ func WarpResponse(ctx context.Context, c *app.RequestContext, content map[string
 	} else {
 		content["cart_num"] = 0 // 未登录时购物车数量为 0
 	}
-
+	log.Printf("content: %v", content)
 	return content
 }
